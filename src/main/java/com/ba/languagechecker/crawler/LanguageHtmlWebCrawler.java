@@ -51,10 +51,12 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	 * should be crawled or not (based on your crawling logic).
 	 */
 	@Override
-	public boolean shouldVisit(WebURL url) {
+	public boolean shouldVisit(final WebURL url) {
 		final String href = url.getURL().toLowerCase();
-		return !FILTERS.matcher(href).matches()
+		final boolean res = !FILTERS.matcher(href).matches()
 				&& parentUrlFilterRegex.matcher(href).matches();
+		if (!res) _log.debug(url.getURL() + " should not be visited");
+		return res;
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	 * by your program.
 	 */
 	@Override
-	public void visit(Page page) {
+	public void visit(final Page page) {
 		final String url = page.getWebURL().getURL();
 		logger.info("URL: " + url);
 

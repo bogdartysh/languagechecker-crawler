@@ -13,6 +13,7 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import org.apache.log4j.BasicConfigurator;
 
 /**
  * Hello world!
@@ -21,7 +22,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 public class App {
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
-		LanguageHtmlWebCrawler.prepareCrawler("en", "pl", ".*wonga\\.com.*");
+		System.out.println("origin - " + args[0] +" dest = " + args[1] +" patter = " + args[2] + " url =" + args[3]);
+		LanguageHtmlWebCrawler.prepareCrawler(args[0], args[1], args[2]);
 
 		/*
 		 * crawlStorageFolder is a folder where intermediate crawl data is
@@ -36,19 +38,19 @@ public class App {
 		 * Be polite: Make sure that we don't send more than 1 request per
 		 * second (1000 milliseconds between requests).
 		 */
-		config.setPolitenessDelay(100);
+		config.setPolitenessDelay(1000);
 
 		/*
 		 * You can set the maximum crawl depth here. The default value is -1 for
 		 * unlimited depth
 		 */
-		config.setMaxDepthOfCrawling(2);
+		config.setMaxDepthOfCrawling(5);
 
 		/*
 		 * You can set the maximum number of pages to crawl. The default value
 		 * is -1 for unlimited number of pages
 		 */
-		config.setMaxPagesToFetch(100);
+		config.setMaxPagesToFetch(-1);
 		/*
 		 * This config parameter can be used to set your crawl to be resumable
 		 * (meaning that you can resume the crawl from a previously
@@ -58,11 +60,11 @@ public class App {
 		 */
 		config.setResumableCrawling(false);
 		config.setIncludeHttpsPages(true);
-		PageFetcher pageFetcher = new PageFetcher(config);
-		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig,
+		final PageFetcher pageFetcher = new PageFetcher(config);
+		final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+		final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig,
 				pageFetcher);
-		CrawlController controller;
+		final CrawlController controller;
 		try {
 			controller = new CrawlController(config, pageFetcher,
 					robotstxtServer);
@@ -71,7 +73,7 @@ public class App {
 			 * first URLs that are fetched and then the crawler starts following
 			 * links which are found in these pages
 			 */
-			controller.addSeed("https://www.wonga.pl/");
+			controller.addSeed(args[3]);
 
 			/*
 			 * Start the crawl. This is a blocking operation, meaning that your

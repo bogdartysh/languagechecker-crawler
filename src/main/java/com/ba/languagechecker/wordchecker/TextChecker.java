@@ -43,6 +43,7 @@ public class TextChecker {
 					addNewWordToSentenc(matcher, word, currentSentense);
 				}
 			} else {
+				_log.debug(word + " of correct labguage");
 				if (currentSentense != null) {
 					currentSentense = null;
 				}
