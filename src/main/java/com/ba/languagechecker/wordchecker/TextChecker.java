@@ -33,7 +33,7 @@ public class TextChecker {
 		WrongSentence currentSentense = null;
 
 		while (matcher.find()) {
-			final String word = matcher.group();
+			final String word = matcher.group().toLowerCase().trim();
 			_log.info("trying word " + matcher.group());
 			if (getWordChecker().isWordOfOriginalLanguage(word)) {
 				if (currentSentense == null) {

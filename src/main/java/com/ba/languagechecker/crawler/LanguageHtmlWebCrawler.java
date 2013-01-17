@@ -120,6 +120,8 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 				+ targetLanguage + DICTIONARY_FILE_EXTENSION);
 		wordChecker.setShouldBeLanguageDictionary(shouldBeLanguageDictionary);
 
+System.out.println(wordChecker.getOriginalLanguageDictionary().dictionary.size() +" " +wordChecker.getShouldBeLanguageDictionary().dictionary.size());
+
 		final TextChecker theTextChecker = new TextChecker();
 		theTextChecker.setWordChecker(wordChecker);
 		LanguageHtmlWebCrawler.setTextChecker(theTextChecker);

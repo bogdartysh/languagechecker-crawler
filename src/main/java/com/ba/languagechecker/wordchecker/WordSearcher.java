@@ -17,7 +17,7 @@ public class WordSearcher {
 	private Logger _log = Logger
 			.getLogger(TextChecker.class.getCanonicalName());
 	private static final int MAX = 300000; 
-	private final Set<String> dictionary  = new HashSet(MAX);
+	public final Set<String> dictionary  = new HashSet(MAX);
 
 	public void loadDictionaryFile(final String dictionaryFileName)
 			throws FileNotFoundException, IOException {
@@ -27,7 +27,7 @@ public class WordSearcher {
 				new FileInputStream(file)))) {
 			String word;
 			while ((word = in.readLine()) != null) {
-				dictionary.add(word);
+				dictionary.add(word.toLowerCase().trim());
 			}
 		}
 		_log.info("dictionary " + dictionaryFileName + " size is " + dictionary.size()); 
