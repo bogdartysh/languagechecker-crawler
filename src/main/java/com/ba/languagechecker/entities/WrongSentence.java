@@ -50,4 +50,12 @@ public class WrongSentence {
 		this.endingIndex = endingIndex;
 	}
 
+	@Override
+	public String toString() {
+		return new StringBuilder(sentence.length() + 10)
+				.append(parentPage.getUrl()).append(", ").append(sentence)
+				.append(", ").append(beginningIndex).append(", ")
+				.append(endingIndex).append(", ").toString();
+	}
+
 }

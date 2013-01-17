@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import com.ba.languagechecker.entities.PageCheckResult;
 import com.ba.languagechecker.entities.WrongSentence;
 
 public class TextChecker {
@@ -25,10 +26,10 @@ public class TextChecker {
 		this.wordChecker = wordChecker;
 	}
 
-	public List<WrongSentence> getErrorSentences(final String text) {
+	public List<WrongSentence> getErrorSentences(final String text,
+			final PageCheckResult pageCheckResul) {
 		final List<WrongSentence> wrongSentences = new LinkedList<WrongSentence>();
 		final Matcher matcher = WORD_PATTERN.matcher(text);
-
 		WrongSentence currentSentense = null;
 
 		while (matcher.find()) {
@@ -36,26 +37,27 @@ public class TextChecker {
 			_log.info("trying word " + matcher.group());
 			if (getWordChecker().isWordOfOriginalLanguage(word)) {
 				if (currentSentense == null) {
-					currentSentense = getCurrentSentence(matcher, word);
+					currentSentense = getCurrentSentence(matcher, word,
+							pageCheckResul);
 				} else {
 					addNewWordToSentenc(matcher, word, currentSentense);
 				}
 			} else {
 				if (currentSentense != null) {
-					storeSentence(matcher, word, currentSentense);
 					currentSentense = null;
 				}
 			}
-
 		}
+		pageCheckResul.setLanguageCorrect(wrongSentences.isEmpty());
 		return wrongSentences;
 	}
 
 	private WrongSentence getCurrentSentence(final Matcher matcher,
-			final String word) {
+			final String word, final PageCheckResult pageCheckResul) {
 		final WrongSentence result = new WrongSentence();
 		result.setBeginningIndex(matcher.start());
 		result.setEndingIndex(result.getBeginningIndex() + word.length());
+		result.setParentPage(pageCheckResul);
 		return result;
 	}
 
@@ -64,11 +66,4 @@ public class TextChecker {
 		currentSentense.setEndingIndex(matcher.start() + word.length());
 	}
 
-	private void storeSentence(final Matcher matcher, final String word,
-			final WrongSentence currentSentense) {
-		_log.warn("new sentence  " + currentSentense.getSentence() + " at "
-				+ currentSentense.getBeginningIndex() + " ... "
-				+ currentSentense.getEndingIndex());
-
-	}
 }

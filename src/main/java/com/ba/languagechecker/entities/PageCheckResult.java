@@ -8,6 +8,14 @@ public class PageCheckResult {
 	private String url;
 	private boolean isLanguageCorrect;
 	private boolean isReachable;
+	
+	
+	
+	public PageCheckResult(String url, boolean isReachable) {
+		super();
+		this.url = url;
+		this.isReachable = isReachable;
+	}
 	public UUID getId() {
 		return id;
 	}
