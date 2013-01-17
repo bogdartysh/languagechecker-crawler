@@ -5,8 +5,9 @@ public class WordChecker {
 	private WordSearcher originalLanguageDictionary;
 
 	public boolean isWordOfOriginalLanguage(final String word) {
-		return originalLanguageDictionary.isWordInTheDictionary(word)
-				&& !shouldBeLanguageDictionary.isWordInTheDictionary(word);
+		final boolean isOriginal = originalLanguageDictionary.isWordInTheDictionary(word);
+		final boolean isShouldBe = shouldBeLanguageDictionary.isWordInTheDictionary(word);		
+		return isOriginal && !isShouldBe;
 	}
 
 	public WordSearcher getShouldBeLanguageDictionary() {

@@ -108,15 +108,18 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 			throws FileNotFoundException, IOException {
 		urlPatternRegexExpression = urlPattern;
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
+		final WordChecker wordChecker = new WordChecker();
+
 		final WordSearcher originalLanguageDictionary = new WordSearcher();
 		originalLanguageDictionary.loadDictionaryFile(PATH_TO_DICTIONARY
 				+ originalLanguage + DICTIONARY_FILE_EXTENSION);
+		wordChecker.setOriginalLanguageDictionary(originalLanguageDictionary);
+
 		final WordSearcher shouldBeLanguageDictionary = new WordSearcher();
 		shouldBeLanguageDictionary.loadDictionaryFile(PATH_TO_DICTIONARY
 				+ targetLanguage + DICTIONARY_FILE_EXTENSION);
-		final WordChecker wordChecker = new WordChecker();
-		wordChecker.setOriginalLanguageDictionary(originalLanguageDictionary);
 		wordChecker.setShouldBeLanguageDictionary(shouldBeLanguageDictionary);
+
 		final TextChecker theTextChecker = new TextChecker();
 		theTextChecker.setWordChecker(wordChecker);
 		LanguageHtmlWebCrawler.setTextChecker(theTextChecker);
