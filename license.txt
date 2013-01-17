@@ -1,5 +1,5 @@
 Open Source License for languagechecker-cralwer
-The following is the license that applies to this copy of the languagechecker-cralwer software. For a license to use the languagechecker-cralwer under conditions other than those described here, or to purchase support for this software, please contact Bogdan Artyushenko
+The following is the license that applies to this copy of the languagechecker-cralwer software. For a license to use the languagechecker-cralwer under conditions other than those described here, or to purchase support for this software, please contact Authors representative
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
