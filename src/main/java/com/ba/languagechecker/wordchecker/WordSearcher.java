@@ -11,14 +11,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import org.apache.log4j.Logger;
 
 public class WordSearcher {
-	private static final int MAX = 25000000; 
-	private static Set<String> dictionary;
+	private Logger _log = Logger
+			.getLogger(TextChecker.class.getCanonicalName());
+	private static final int MAX = 300000; 
+	private final Set<String> dictionary  = new HashSet(MAX);
 
 	public void loadDictionaryFile(final String dictionaryFileName)
 			throws FileNotFoundException, IOException {
-		dictionary = new HashSet(MAX);
+		dictionary.clear();
 		final File file = new File(dictionaryFileName);
 		try (BufferedReader in = new BufferedReader(new InputStreamReader(
 				new FileInputStream(file)))) {
@@ -27,7 +30,7 @@ public class WordSearcher {
 				dictionary.add(word);
 			}
 		}
-		System.out.println("dictionary " + dictionaryFileName + " size is " + dictionary.size()); 
+		_log.info("dictionary " + dictionaryFileName + " size is " + dictionary.size()); 
 	}
 
 
@@ -35,46 +38,4 @@ public class WordSearcher {
 		return dictionary.contains(word);
 	}
 
-
-/*
-	private final Map<String, Set<String>> map = new HashMap<String, Set<String>>(
-			MAX);
-
-	public void loadWord(final String word) {
-
-		String sorted = sort(word);
-		Set<String> words = map.get(sorted);
-		if (words == null) {
-			words = new TreeSet<String>();
-			words.add(word);
-			map.put(sorted, words);
-		} else {
-			words.add(word);
-		}
-
-	}
-
-	public void loadDictionaryFile(final String dictionaryFileName)
-			throws FileNotFoundException, IOException {
-		final File file = new File(dictionaryFileName);
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(
-				new FileInputStream(file)))) {
-			String word;
-			while ((word = in.readLine()) != null) {
-				loadWord(word);
-			}
-		}
-		System.out.println("dictionary " + dictionaryFileName + " size is " + map.size()); 
-	}
-
-	// Sort the letters of a word
-	private String sort(final String s) {
-		byte[] ba = s.toLowerCase().getBytes();
-		Arrays.sort(ba);
-		return new String(ba);
-	}
-
-	public boolean isWordInTheDictionary(final String word) {
-		return map.containsKey(sort(word));
-	}    */
 }
