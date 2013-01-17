@@ -29,7 +29,7 @@ public class App {
 		 * crawlStorageFolder is a folder where intermediate crawl data is
 		 * stored.
 		 */
-		final String crawlStorageFolder = "D:\\tmp\\crawler";
+		final String crawlStorageFolder = "tmp";
 
 		final CrawlConfig config = new CrawlConfig();
 
