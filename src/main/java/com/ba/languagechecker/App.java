@@ -22,7 +22,8 @@ public class App {
 			IOException {
 		System.out.println("origin - " + args[0] + " dest = " + args[1]
 				+ " patter = " + args[2] + " url =" + args[3] + " depth = " + args[4]);
-		LanguageHtmlWebCrawler.prepareCrawler(args[0], args[1], args[2]);
+		LanguageHtmlWebCrawler.prepareCrawler(args[0], args[1], args[2]);	
+		
 
 		/*
 		 * crawlStorageFolder is a folder where intermediate crawl data is
