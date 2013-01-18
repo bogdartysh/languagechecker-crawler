@@ -60,7 +60,6 @@ public class TextChecker {
 					_log.debug(word
 							+ " is not a word I wanna check, but would be added to existed sentence id="
 							+ currentSentense.getId());
-					addNewWordToSentenc(matcher, word, currentSentense);
 				}
 				continue;
 			}
@@ -98,11 +97,12 @@ public class TextChecker {
 
 	private WrongSentence getCurrentSentence(final Matcher matcher,
 			final String word, final PageCheckResult pageCheckResul) {
-		final WrongSentence result = new WrongSentence();
-		result.setBeginningIndex(matcher.start());
-		result.setEndingIndex(result.getBeginningIndex() + word.length());
-		result.setParentPage(pageCheckResul);
-		return result;
+		final WrongSentence sentence = new WrongSentence();
+		sentence.setBeginningIndex(matcher.start());
+		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length());
+		sentence.setParentPage(pageCheckResul);
+		sentence.incAmountOfAddedWords();
+		return sentence;
 	}
 
 	private void addNewWordToSentenc(final Matcher matcher, final String word,
@@ -110,15 +110,20 @@ public class TextChecker {
 		_log.debug(word + "continued a wrong sentence which started at"
 				+ sentence.getBeginningIndex());
 		sentence.setEndingIndex(matcher.start() + word.length());
+		sentence.incAmountOfAddedWords();
 	}
 
 	private void closeSentenceAndAddNewWrongSentence(
 			final List<WrongSentence> sentences, final WrongSentence sentence,
 			final String text) {
 		sentence.setSentenceByText(text);
-		sentences.add(sentence);
-		_log.info(sentence.getSentence() + " added to previously found on "
-				+ sentence.getParentPage().getUrl());
+		if (sentence.isSentenceLongEnaugh()) {
+			sentences.add(sentence);
+			_log.info(sentence.getSentence() + " added to previously found on "
+					+ sentence.getParentPage().getUrl());
+		}
+		_log.info(sentence.getSentence() + " is too short to be considered");
+
 	}
 
 }

@@ -2,13 +2,18 @@ package com.ba.languagechecker.entities;
 
 import java.util.UUID;
 
+import org.apache.commons.codec.binary.StringUtils;
+
 public class WrongSentence {
 
+
+	private static final int MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE = 3;
 	private UUID id;
 	private String sentence;
 	private int beginningIndex = -1;
 	private int endingIndex = -1;
 	private PageCheckResult parentPage;
+	private int amountOfAddedWords = 0;
 
 	public WrongSentence() {
 		super();
@@ -66,5 +71,22 @@ public class WrongSentence {
 				.append(beginningIndex).append(", ").append(endingIndex)
 				.append(", ").toString();
 	}
+
+	public int getAmountOfAddedWords() {
+		return amountOfAddedWords;
+	}
+
+	public void setAmountOfAddedWords(int amountOfAddedWords) {
+		this.amountOfAddedWords = amountOfAddedWords;
+	}
+	
+	public void incAmountOfAddedWords() {
+		amountOfAddedWords ++;
+	}
+	
+	public boolean isSentenceLongEnaugh() {
+		return getAmountOfAddedWords() >= MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE; 
+	}
+
 
 }
