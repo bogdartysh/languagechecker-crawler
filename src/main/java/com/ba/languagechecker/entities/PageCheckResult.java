@@ -15,6 +15,7 @@ public class PageCheckResult {
 		super();
 		this.url = url;
 		this.isReachable = isReachable;
+		id = UUID.randomUUID();
 	}
 	public UUID getId() {
 		return id;

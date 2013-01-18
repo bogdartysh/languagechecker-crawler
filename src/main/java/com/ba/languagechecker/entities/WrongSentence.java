@@ -10,6 +10,11 @@ public class WrongSentence {
 	private int endingIndex = -1;
 	private PageCheckResult parentPage;
 
+	public WrongSentence() {
+		super();
+		id = UUID.randomUUID();
+	}
+
 	public PageCheckResult getParentPage() {
 		return parentPage;
 	}
@@ -50,12 +55,16 @@ public class WrongSentence {
 		this.endingIndex = endingIndex;
 	}
 
+	public void setSentenceByText(final String text) {
+		setSentence(text.substring(beginningIndex, endingIndex));
+	}
+
 	@Override
 	public String toString() {
-		return new StringBuilder(sentence.length() + 10)
-				.append(parentPage.getUrl()).append(", ").append(sentence)
-				.append(", ").append(beginningIndex).append(", ")
-				.append(endingIndex).append(", ").toString();
+		return new StringBuilder().append("\"").append(parentPage.getUrl())
+				.append("\", \"").append(sentence).append("\", ")
+				.append(beginningIndex).append(", ").append(endingIndex)
+				.append(", ").toString();
 	}
 
 }

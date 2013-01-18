@@ -84,7 +84,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 
 	private void saveSentences(final List<WrongSentence> sentences,
 			final String url) {
-		System.out.println(url);
+		_log.info(url);
 		for (WrongSentence sentence : sentences) {
 			System.out.println(sentence.toString());
 		}

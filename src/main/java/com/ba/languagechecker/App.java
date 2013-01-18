@@ -21,7 +21,7 @@ public class App {
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
 		System.out.println("origin - " + args[0] + " dest = " + args[1]
-				+ " patter = " + args[2] + " url =" + args[3]);
+				+ " patter = " + args[2] + " url =" + args[3] + " depth = " + args[4]);
 		LanguageHtmlWebCrawler.prepareCrawler(args[0], args[1], args[2]);
 
 		/*
@@ -42,7 +42,7 @@ public class App {
 		 * You can set the maximum crawl depth here. The default value is -1 for
 		 * unlimited depth
 		 */
-		config.setMaxDepthOfCrawling(5);
+		config.setMaxDepthOfCrawling(Integer.valueOf(args[4]));
 
 		/*
 		 * You can set the maximum number of pages to crawl. The default value
