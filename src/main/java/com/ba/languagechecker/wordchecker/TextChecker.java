@@ -1,5 +1,7 @@
 package com.ba.languagechecker.wordchecker;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.ba.languagechecker.entities.PageCheckResult;
 import com.ba.languagechecker.entities.WrongSentence;
 
+
 public class TextChecker {
 	private Logger _log = Logger
 			.getLogger(TextChecker.class.getCanonicalName());
@@ -17,6 +20,22 @@ public class TextChecker {
 	private static final String WORD_PATTERN_EXPR = "[.,\"\'\\p{Blank}\\s][\\p{L}\\w]+[\\p{Blank}\\s.,\"\']";
 	private static final Pattern WORD_PATTERN = Pattern
 			.compile(WORD_PATTERN_EXPR);
+
+	public TextChecker(final String originalLanguage,
+			final String souldBeLanguage) throws FileNotFoundException,
+			IOException {
+		super();
+		wordChecker = new WordChecker(originalLanguage,
+				souldBeLanguage);
+		_log.info(originalLanguage
+				+ " size = "
+				+ wordChecker.getOriginalLanguageDictionary().dictionary.size()
+				+ " "
+				+ souldBeLanguage
+				+ " size = "
+				+ +wordChecker.getShouldBeLanguageDictionary().dictionary
+						.size());
+	}
 
 	public WordChecker getWordChecker() {
 		return wordChecker;

@@ -4,32 +4,30 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.ba.languagechecker.crawler.LanguageHtmlWebCrawler;
-import com.ba.languagechecker.wordchecker.TextChecker;
-import com.ba.languagechecker.wordchecker.WordChecker;
-import com.ba.languagechecker.wordchecker.WordSearcher;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
-import org.apache.log4j.BasicConfigurator;
 
 /**
  * Hello world!
  * 
  */
 public class App {
+	private final static String crawlStorageFolder = "tmp";
+
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
-		System.out.println("origin - " + args[0] +" dest = " + args[1] +" patter = " + args[2] + " url =" + args[3]);
+		System.out.println("origin - " + args[0] + " dest = " + args[1]
+				+ " patter = " + args[2] + " url =" + args[3]);
 		LanguageHtmlWebCrawler.prepareCrawler(args[0], args[1], args[2]);
 
 		/*
 		 * crawlStorageFolder is a folder where intermediate crawl data is
 		 * stored.
 		 */
-		final String crawlStorageFolder = "tmp";
 
 		final CrawlConfig config = new CrawlConfig();
 
@@ -62,8 +60,8 @@ public class App {
 		config.setIncludeHttpsPages(true);
 		final PageFetcher pageFetcher = new PageFetcher(config);
 		final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig,
-				pageFetcher);
+		final RobotstxtServer robotstxtServer = new RobotstxtServer(
+				robotstxtConfig, pageFetcher);
 		final CrawlController controller;
 		try {
 			controller = new CrawlController(config, pageFetcher,

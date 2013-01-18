@@ -2,38 +2,24 @@ package com.ba.languagechecker.crawler;
 
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
-import edu.uci.ics.crawler4j.fetcher.PageFetchResult;
-import edu.uci.ics.crawler4j.fetcher.CustomFetchStatus;
-import edu.uci.ics.crawler4j.fetcher.PageFetcher;
-import edu.uci.ics.crawler4j.frontier.DocIDServer;
-import edu.uci.ics.crawler4j.frontier.Frontier;
+
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.parser.ParseData;
-import edu.uci.ics.crawler4j.parser.Parser;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.PageCheckResult;
 import com.ba.languagechecker.entities.WrongSentence;
 import com.ba.languagechecker.wordchecker.TextChecker;
-import com.ba.languagechecker.wordchecker.WordChecker;
-import com.ba.languagechecker.wordchecker.WordSearcher;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class LanguageHtmlWebCrawler extends WebCrawler {
 	private static Logger _log = Logger.getLogger(LanguageHtmlWebCrawler.class
 			.getCanonicalName());
-	private static final String PATH_TO_DICTIONARY = "dict/";
-	private static final String DICTIONARY_FILE_EXTENSION = ".dict";
 
 	private final static Pattern FILTERS = Pattern
 			.compile(".*(\\.(css|js|bmp|gif|jpe?g"
@@ -55,7 +41,8 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		final String href = url.getURL().toLowerCase();
 		final boolean res = !FILTERS.matcher(href).matches()
 				&& parentUrlFilterRegex.matcher(href).matches();
-		if (!res) _log.debug(url.getURL() + " should not be visited");
+		if (!res)
+			_log.debug(url.getURL() + " should not be visited");
 		return res;
 	}
 
@@ -95,7 +82,8 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		textChecker = theTextChecker;
 	}
 
-	private void saveSentences(final List<WrongSentence> sentences, final String url) {
+	private void saveSentences(final List<WrongSentence> sentences,
+			final String url) {
 		System.out.println(url);
 		for (WrongSentence sentence : sentences) {
 			System.out.println(sentence.toString());
@@ -108,23 +96,9 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 			throws FileNotFoundException, IOException {
 		urlPatternRegexExpression = urlPattern;
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
-		final WordChecker wordChecker = new WordChecker();
-
-		final WordSearcher originalLanguageDictionary = new WordSearcher();
-		originalLanguageDictionary.loadDictionaryFile(PATH_TO_DICTIONARY
-				+ originalLanguage + DICTIONARY_FILE_EXTENSION);
-		wordChecker.setOriginalLanguageDictionary(originalLanguageDictionary);
-
-		final WordSearcher shouldBeLanguageDictionary = new WordSearcher();
-		shouldBeLanguageDictionary.loadDictionaryFile(PATH_TO_DICTIONARY
-				+ targetLanguage + DICTIONARY_FILE_EXTENSION);
-		wordChecker.setShouldBeLanguageDictionary(shouldBeLanguageDictionary);
-
-System.out.println(wordChecker.getOriginalLanguageDictionary().dictionary.size() +" " +wordChecker.getShouldBeLanguageDictionary().dictionary.size());
-
-		final TextChecker theTextChecker = new TextChecker();
-		theTextChecker.setWordChecker(wordChecker);
-		LanguageHtmlWebCrawler.setTextChecker(theTextChecker);
+		final TextChecker theTextChecker = new TextChecker(originalLanguage,
+				targetLanguage);
+		setTextChecker(theTextChecker);
 	}
 
 }
