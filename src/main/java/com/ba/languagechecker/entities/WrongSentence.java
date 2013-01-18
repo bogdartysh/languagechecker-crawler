@@ -11,7 +11,7 @@ public class WrongSentence {
 	private PageCheckResult parentPage;
 	private int amountOfAddedWords = 0;
 
-	public static int MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE = 3;
+	public int MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE = 3;
 
 	public WrongSentence() {
 		super();
