@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public class WrongSentence {
 
-	
 	private UUID id;
 	private String sentence;
 	private int beginningIndex = -1;
@@ -13,7 +12,7 @@ public class WrongSentence {
 	private int amountOfAddedWords = 0;
 
 	public static int MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE = 3;
-	
+
 	public WrongSentence() {
 		super();
 		id = UUID.randomUUID();
@@ -68,7 +67,7 @@ public class WrongSentence {
 		return new StringBuilder().append("\"").append(parentPage.getUrl())
 				.append("\", \"").append(sentence).append("\", ")
 				.append(beginningIndex).append(", ").append(endingIndex)
-				.append(", ").toString();
+				.toString();
 	}
 
 	public int getAmountOfAddedWords() {
