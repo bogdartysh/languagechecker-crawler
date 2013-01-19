@@ -16,7 +16,13 @@ import com.ba.languagechecker.entities.WrongSentence;
 public class TextChecker {
 	private Logger _log = Logger
 			.getLogger(TextChecker.class.getCanonicalName());
-	private static final String WORD_PATTERN_EXPR = "[.,\"\'\\p{Blank}\\s][\\p{L}a-zA-Z]+[\\p{Blank}\\s.,\"\']";
+	private static final String WORD_PART_PATTERN_EXPR = "[\\p{L}a-zA-Z]+";
+	private static final Pattern WORD_PART_PATTERN = Pattern
+			.compile(WORD_PART_PATTERN_EXPR);
+
+	private static final String SPACE_BEFORE_WORD = "[\\p{Blank}\\s.,\"\']+";
+	private static final String WORD_PATTERN_EXPR = SPACE_BEFORE_WORD
+			+ WORD_PART_PATTERN_EXPR + SPACE_BEFORE_WORD;
 	private static final Pattern WORD_PATTERN = Pattern
 			.compile(WORD_PATTERN_EXPR);
 
@@ -64,17 +70,22 @@ public class TextChecker {
 		WrongSentence currentSentense = null;
 
 		while (matcher.find()) {
-			final String word = matcher.group().toLowerCase().trim();
-			if (!WordChecker.isAWord(word)) {
+			final String found = matcher.group();
+			final Matcher innermatcher = WORD_PART_PATTERN.matcher(found);
+			final boolean isWordInIt = innermatcher.find();
+			_log.info("found " + found + " " + isWordInIt);
+			final String possibleWord = innermatcher.group();
+			if (!WordChecker.isAWord(possibleWord)) {
 
 				if (currentSentense != null) {
-					_log.debug(word
+					_log.debug(possibleWord
 							+ " is not a word I wanna check, but would be added to existed sentence id="
 							+ currentSentense.getId());
 				}
 				continue;
 			}
-			_log.info("trying word " + matcher.group());
+			final String word = possibleWord.toLowerCase();
+			_log.info("trying word " + word);
 			if (getWordChecker().isWordOfOriginalLanguage(word)) {
 				_log.info(word + "of wrong language");
 				if (currentSentense == null) {
@@ -130,10 +141,13 @@ public class TextChecker {
 		sentence.setSentenceByText(text);
 		if (sentence.isSentenceLongEnaugh(minimumLengthOfSsentenceInWords)) {
 			sentences.add(sentence);
-			_log.info(sentence.getSentence() + " added to previously found on "
+			_log.info("\"" + sentence.getSentence()
+					+ "\" added to previously found on "
 					+ sentence.getParentPage().getUrl());
+		} else {
+			_log.info("\"" + sentence.getSentence()
+					+ "\" is too short to be considered");
 		}
-		_log.info(sentence.getSentence() + " is too short to be considered");
 
 	}
 
