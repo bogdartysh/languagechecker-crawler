@@ -7,7 +7,9 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.ba.languagechecker.crawler.LanguageCheckerCrawlController;
 import com.ba.languagechecker.crawler.LanguageHtmlWebCrawler;
+import com.ba.languagechecker.properties.TaskProperties;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -20,7 +22,7 @@ public class App {
 	private final static String CRAWLER_PROPERTIES_FILE_NAME = "crawler.properties";
 	private static Logger _log = Logger.getLogger(App.class.getCanonicalName());
 
-	private final Properties taskProperties = new Properties();
+	private final TaskProperties taskProperties = new TaskProperties();
 	private final Properties crawlerProperties = new Properties();
 
 	public static void main(String[] args) throws FileNotFoundException,
@@ -34,8 +36,8 @@ public class App {
 
 				app.taskProperties.load(faskPropertiesFileStream);
 
-
-				LanguageHtmlWebCrawler.prepareCrawler(app.taskProperties, app.crawlerProperties);
+				LanguageHtmlWebCrawler.prepareCrawler(app.taskProperties,
+						app.crawlerProperties);
 
 				/*
 				 * crawlStorageFolder is a folder where intermediate crawl data
@@ -79,17 +81,16 @@ public class App {
 				final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 				final RobotstxtServer robotstxtServer = new RobotstxtServer(
 						robotstxtConfig, pageFetcher);
-				final CrawlController controller;
+				final LanguageCheckerCrawlController controller;
 				try {
-					controller = new CrawlController(config, pageFetcher,
-							robotstxtServer);
+					controller = new LanguageCheckerCrawlController(config,
+							pageFetcher, robotstxtServer);
 					/*
 					 * For each crawl, you need to add some seed urls. These are
 					 * the first URLs that are fetched and then the crawler
 					 * starts following links which are found in these pages
 					 */
-					controller.addSeed(app.taskProperties
-							.getProperty("start_url"));
+					controller.addSeeds(app.taskProperties);
 
 					/*
 					 * Start the crawl. This is a blocking operation, meaning
