@@ -1,7 +1,11 @@
 package com.ba.languagechecker;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
+
+import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.crawler.LanguageHtmlWebCrawler;
 
@@ -11,79 +15,94 @@ import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
-/**
- * Hello world!
- * 
- */
 public class App {
-	private final static String crawlStorageFolder = "tmp";
+	private final static String TASK_PROPERTIES_FILE_NAME = "task.properties";
+	private final static String CRAWLER_PROPERTIES_FILE_NAME = "crawler.properties";
+	private static Logger _log = Logger.getLogger(App.class.getCanonicalName());
+
+	private final Properties taskProperties = new Properties();
+	private final Properties crawlerProperties = new Properties();
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
-		System.out.println("origin - " + args[0] + " dest = " + args[1]
-				+ " patter = " + args[2] + " url =" + args[3] + " depth = " + args[4]);
-		LanguageHtmlWebCrawler.prepareCrawler(args[0], args[1], args[2]);	
-		
+		final App app = new App();
+		try (final FileInputStream crawlerPropertiesFileStream = new FileInputStream(
+				CRAWLER_PROPERTIES_FILE_NAME)) {
+			app.crawlerProperties.load(crawlerPropertiesFileStream);
+			try (final FileInputStream faskPropertiesFileStream = new FileInputStream(
+					TASK_PROPERTIES_FILE_NAME)) {
 
-		/*
-		 * crawlStorageFolder is a folder where intermediate crawl data is
-		 * stored.
-		 */
+				app.taskProperties.load(faskPropertiesFileStream);
 
-		final CrawlConfig config = new CrawlConfig();
 
-		config.setCrawlStorageFolder(crawlStorageFolder);
-		/*
-		 * Be polite: Make sure that we don't send more than 1 request per
-		 * second (1000 milliseconds between requests).
-		 */
-		config.setPolitenessDelay(1000);
+				LanguageHtmlWebCrawler.prepareCrawler(app.taskProperties, app.crawlerProperties);
 
-		/*
-		 * You can set the maximum crawl depth here. The default value is -1 for
-		 * unlimited depth
-		 */
-		config.setMaxDepthOfCrawling(Integer.valueOf(args[4]));
+				/*
+				 * crawlStorageFolder is a folder where intermediate crawl data
+				 * is stored.
+				 */
 
-		/*
-		 * You can set the maximum number of pages to crawl. The default value
-		 * is -1 for unlimited number of pages
-		 */
-		config.setMaxPagesToFetch(-1);
-		/*
-		 * This config parameter can be used to set your crawl to be resumable
-		 * (meaning that you can resume the crawl from a previously
-		 * interrupted/crashed crawl). Note: if you enable resuming feature and
-		 * want to start a fresh crawl, you need to delete the contents of
-		 * rootFolder manually.
-		 */
-		config.setResumableCrawling(false);
-		config.setIncludeHttpsPages(true);
-		final PageFetcher pageFetcher = new PageFetcher(config);
-		final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		final RobotstxtServer robotstxtServer = new RobotstxtServer(
-				robotstxtConfig, pageFetcher);
-		final CrawlController controller;
-		try {
-			controller = new CrawlController(config, pageFetcher,
-					robotstxtServer);
-			/*
-			 * For each crawl, you need to add some seed urls. These are the
-			 * first URLs that are fetched and then the crawler starts following
-			 * links which are found in these pages
-			 */
-			controller.addSeed(args[3]);
+				final CrawlConfig config = new CrawlConfig();
 
-			/*
-			 * Start the crawl. This is a blocking operation, meaning that your
-			 * code will reach the line after this only when crawling is
-			 * finished.
-			 */
-			controller.start(LanguageHtmlWebCrawler.class, 2);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				config.setCrawlStorageFolder(app.crawlerProperties.getProperty(
+						"crawlerProperties", "tmp"));
+				/*
+				 * Be polite: Make sure that we don't send more than 1 request
+				 * per second (1000 milliseconds between requests).
+				 */
+				config.setPolitenessDelay(Integer.valueOf(app.crawlerProperties
+						.getProperty("politeness_delay")));
+
+				/*
+				 * You can set the maximum crawl depth here. The default value
+				 * is -1 for unlimited depth
+				 */
+				config.setMaxDepthOfCrawling(Integer.valueOf(app.taskProperties
+						.getProperty("max_depth")));
+
+				/*
+				 * You can set the maximum number of pages to crawl. The default
+				 * value is -1 for unlimited number of pages
+				 */
+				config.setMaxPagesToFetch(Integer.valueOf(app.taskProperties
+						.getProperty("max_pages_to_check")));
+				/*
+				 * This config parameter can be used to set your crawl to be
+				 * resumable (meaning that you can resume the crawl from a
+				 * previously interrupted/crashed crawl). Note: if you enable
+				 * resuming feature and want to start a fresh crawl, you need to
+				 * delete the contents of rootFolder manually.
+				 */
+				config.setResumableCrawling(false);
+				config.setIncludeHttpsPages(true);
+				final PageFetcher pageFetcher = new PageFetcher(config);
+				final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+				final RobotstxtServer robotstxtServer = new RobotstxtServer(
+						robotstxtConfig, pageFetcher);
+				final CrawlController controller;
+				try {
+					controller = new CrawlController(config, pageFetcher,
+							robotstxtServer);
+					/*
+					 * For each crawl, you need to add some seed urls. These are
+					 * the first URLs that are fetched and then the crawler
+					 * starts following links which are found in these pages
+					 */
+					controller.addSeed(app.taskProperties
+							.getProperty("start_url"));
+
+					/*
+					 * Start the crawl. This is a blocking operation, meaning
+					 * that your code will reach the line after this only when
+					 * crawling is finished.
+					 */
+					controller.start(LanguageHtmlWebCrawler.class, Integer
+							.valueOf(app.crawlerProperties
+									.getProperty("number_of_crawlers")));
+				} catch (Exception e) {
+					_log.error(e, e);
+				}
+			}
 		}
-
 	}
 }

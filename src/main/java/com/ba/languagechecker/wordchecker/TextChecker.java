@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,23 +20,33 @@ public class TextChecker {
 	private static final Pattern WORD_PATTERN = Pattern
 			.compile(WORD_PATTERN_EXPR);
 
-	private static final int DISTANCE_BETWEEN_SENTENCES = 20;
+	private int distanceBetweenSentencesInCharacters = 20;
+
+	private int minimumLengthOfSsentenceInWords = 3;
 
 	private WordChecker wordChecker;
 
-	public TextChecker(final String originalLanguage,
-			final String souldBeLanguage) throws FileNotFoundException,
-			IOException {
+	public TextChecker(final Properties taskProperties)
+			throws FileNotFoundException, IOException {
 		super();
-		wordChecker = new WordChecker(originalLanguage, souldBeLanguage);
-		_log.info(originalLanguage
-				+ " size = "
-				+ wordChecker.getOriginalLanguageDictionary().dictionary.size()
-				+ " "
-				+ souldBeLanguage
-				+ " size = "
-				+ +wordChecker.getShouldBeLanguageDictionary().dictionary
-						.size());
+		this.minimumLengthOfSsentenceInWords = Integer.valueOf(taskProperties
+				.getProperty("minimum_length_of_sentence_in_words", "2"));
+		this.distanceBetweenSentencesInCharacters = Integer
+				.valueOf(taskProperties.getProperty(
+						"distance_between_sentences_in_characters", "30"));
+		wordChecker = new WordChecker(
+				taskProperties.getProperty("origin_language_code"),
+				taskProperties.getProperty("shouldbe_language_code"));
+		_log.info("origin - "
+				+ taskProperties.getProperty("origin_language_code")
+				+ " dest = "
+				+ taskProperties.getProperty("shouldbe_language_code")
+				+ " depth = "
+				+ taskProperties.getProperty("max_depth")
+				+ " distance_between_sentences_in_characters = "
+				+ taskProperties
+						.getProperty("distance_between_sentences_in_characters"));
+
 	}
 
 	public WordChecker getWordChecker() {
@@ -92,7 +103,7 @@ public class TextChecker {
 
 	private boolean isFarFromPreviousSentence(final Matcher matcher,
 			final WrongSentence sentence) {
-		return matcher.start() - sentence.getEndingIndex() > DISTANCE_BETWEEN_SENTENCES;
+		return matcher.start() - sentence.getEndingIndex() > distanceBetweenSentencesInCharacters;
 	}
 
 	private WrongSentence getCurrentSentence(final Matcher matcher,
@@ -117,7 +128,7 @@ public class TextChecker {
 			final List<WrongSentence> sentences, final WrongSentence sentence,
 			final String text) {
 		sentence.setSentenceByText(text);
-		if (sentence.isSentenceLongEnaugh()) {
+		if (sentence.isSentenceLongEnaugh(minimumLengthOfSsentenceInWords)) {
 			sentences.add(sentence);
 			_log.info(sentence.getSentence() + " added to previously found on "
 					+ sentence.getParentPage().getUrl());

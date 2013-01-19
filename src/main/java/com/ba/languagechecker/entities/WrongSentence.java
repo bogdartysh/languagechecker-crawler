@@ -11,8 +11,6 @@ public class WrongSentence {
 	private PageCheckResult parentPage;
 	private int amountOfAddedWords = 0;
 
-	public int MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE = 3;
-
 	public WrongSentence() {
 		super();
 		id = UUID.randomUUID();
@@ -82,8 +80,8 @@ public class WrongSentence {
 		amountOfAddedWords++;
 	}
 
-	public boolean isSentenceLongEnaugh() {
-		return getAmountOfAddedWords() >= MINIMUM_AMOUNT_OF_WORDS_IN_A_SENTECNE;
+	public boolean isSentenceLongEnaugh(int minimumLengthOfSsentenceInWords) {
+		return getAmountOfAddedWords() >= minimumLengthOfSsentenceInWords;
 	}
 
 }

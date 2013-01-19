@@ -15,6 +15,7 @@ import com.ba.languagechecker.wordchecker.TextChecker;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class LanguageHtmlWebCrawler extends WebCrawler {
@@ -91,14 +92,13 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 
 	}
 
-	public static void prepareCrawler(final String originalLanguage,
-			final String targetLanguage, final String urlPattern)
-			throws FileNotFoundException, IOException {
-		urlPatternRegexExpression = urlPattern;
+	public static void prepareCrawler(final Properties taskProperties,
+			final Properties crawlerProperties) throws FileNotFoundException,
+			IOException {
+		_log.info(" url_pattern = " + taskProperties.getProperty("url_pattern"));
+		urlPatternRegexExpression = taskProperties.getProperty("url_pattern");
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
-		final TextChecker theTextChecker = new TextChecker(originalLanguage,
-				targetLanguage);
+		final TextChecker theTextChecker = new TextChecker(taskProperties);
 		setTextChecker(theTextChecker);
 	}
-
 }
