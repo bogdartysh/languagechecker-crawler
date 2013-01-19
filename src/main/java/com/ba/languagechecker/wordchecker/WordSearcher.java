@@ -1,9 +1,11 @@
 package com.ba.languagechecker.wordchecker;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Set;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
@@ -27,11 +29,13 @@ public class WordSearcher {
 	public void loadDictionaryFile(final String dictionaryFileName)
 			throws FileNotFoundException, IOException {
 		dictionary.clear();
-		final FileReader file = new FileReader(dictionaryFileName);
-		try (BufferedReader in = new BufferedReader(file)) {
-			String word;
-			while ((word = in.readLine()) != null) {
-				dictionary.add(word.toLowerCase().trim());
+		try (Reader reader = new InputStreamReader(new FileInputStream(
+				dictionaryFileName), "utf-8")) {
+			try (BufferedReader in = new BufferedReader(reader)) {
+				String word;
+				while ((word = in.readLine()) != null) {
+					dictionary.add(word.toLowerCase().trim());
+				}
 			}
 		}
 		_log.info("dictionary " + dictionaryFileName + " size is "
