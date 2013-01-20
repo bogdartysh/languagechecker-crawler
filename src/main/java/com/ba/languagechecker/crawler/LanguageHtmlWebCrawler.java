@@ -10,10 +10,13 @@ import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.PageCheckResult;
 import com.ba.languagechecker.entities.WrongSentence;
+import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.TextChecker;
+import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -30,6 +33,9 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	private static String urlPatternRegexExpression;
 
 	private static Pattern parentUrlFilterRegex;
+
+	private static boolean IsPageTitleCheckable;
+	private static boolean IsPageTextCheckable;
 
 	private static TextChecker textChecker;
 
@@ -69,18 +75,17 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 			logger.debug("Number of outgoing links: " + links.size());
 			final PageCheckResult pageCheckResult = new PageCheckResult(url,
 					true);
-			final List<WrongSentence> sentences = textChecker
-					.getErrorSentences(text, pageCheckResult);
+			final List<WrongSentence> sentences = new LinkedList<WrongSentence>();
+
+			if (IsPageTextCheckable)
+				textChecker.addWrongSentences(sentences,
+						text, pageCheckResult);
+			if (IsPageTitleCheckable)
+				textChecker.addWrongSentences(sentences,
+						title, pageCheckResult);
+
 			saveSentences(sentences, url);
 		}
-	}
-
-	public static TextChecker getTextChecker() {
-		return textChecker;
-	}
-
-	public static void setTextChecker(TextChecker theTextChecker) {
-		textChecker = theTextChecker;
 	}
 
 	private void saveSentences(final List<WrongSentence> sentences,
@@ -92,13 +97,16 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 
 	}
 
-	public static void prepareCrawler(final Properties taskProperties,
+	public static void prepareCrawler(final TaskProperties taskProperties,
 			final Properties crawlerProperties) throws FileNotFoundException,
 			IOException {
+
 		_log.info(" url_pattern = " + taskProperties.getProperty("url_pattern"));
 		urlPatternRegexExpression = taskProperties.getProperty("url_pattern");
+		IsPageTitleCheckable = taskProperties.IsPageTitleCheckable();
+		IsPageTextCheckable = taskProperties.IsPageTextCheckable();
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
-		final TextChecker theTextChecker = new TextChecker(taskProperties);
-		setTextChecker(theTextChecker);
+		WordCheckersHolder.getInstance().setProperties(taskProperties);
+		textChecker = new TextChecker(taskProperties);
 	}
 }

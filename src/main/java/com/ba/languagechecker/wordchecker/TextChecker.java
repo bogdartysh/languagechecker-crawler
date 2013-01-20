@@ -2,9 +2,7 @@ package com.ba.languagechecker.wordchecker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,10 +10,15 @@ import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.PageCheckResult;
 import com.ba.languagechecker.entities.WrongSentence;
+import com.ba.languagechecker.entities.WrongSentenceType;
+import com.ba.languagechecker.properties.TaskProperties;
+import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
+import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 public class TextChecker {
-	private Logger _log = Logger
+	private static Logger _log = Logger
 			.getLogger(TextChecker.class.getCanonicalName());
+	private static final String EMPTY_STRING = "";
 	private static final String WORD_PART_PATTERN_EXPR = "[\\p{L}a-zA-Z]+";
 	private static final Pattern WORD_PART_PATTERN = Pattern
 			.compile(WORD_PART_PATTERN_EXPR);
@@ -26,23 +29,16 @@ public class TextChecker {
 	private static final Pattern WORD_PATTERN = Pattern
 			.compile(WORD_PATTERN_EXPR);
 
-	private int distanceBetweenSentencesInCharacters = 20;
+	private List<String> excludedWords;
 
-	private int minimumLengthOfSsentenceInWords = 3;
-
-	private WordChecker wordChecker;
-
-	public TextChecker(final Properties taskProperties)
+	public TextChecker(final TaskProperties taskProperties)
 			throws FileNotFoundException, IOException {
 		super();
-		this.minimumLengthOfSsentenceInWords = Integer.valueOf(taskProperties
-				.getProperty("minimum_length_of_sentence_in_words", "2"));
-		this.distanceBetweenSentencesInCharacters = Integer
+		WrongSentenceType.LANGUAGE.setMimumSentenceLength(Integer
 				.valueOf(taskProperties.getProperty(
-						"distance_between_sentences_in_characters", "30"));
-		wordChecker = new WordChecker(
-				taskProperties.getProperty("origin_language_code"),
-				taskProperties.getProperty("shouldbe_language_code"));
+						"minimum_length_of_sentence_in_words", "2")));
+		DictionaryHolder.getInstance().loadDictionaries(taskProperties);
+		excludedWords = taskProperties.getExcludedWordsFromChecking();
 		_log.info("origin - "
 				+ taskProperties.getProperty("origin_language_code")
 				+ " dest = "
@@ -55,71 +51,68 @@ public class TextChecker {
 
 	}
 
-	public WordChecker getWordChecker() {
-		return wordChecker;
-	}
+	public void addWrongSentences(List<WrongSentence> wrongSentences,
+			final String text, final PageCheckResult pageCheckResult) {
 
-	public void setWordChecker(WordChecker wordChecker) {
-		this.wordChecker = wordChecker;
-	}
-
-	public List<WrongSentence> getErrorSentences(final String text,
-			final PageCheckResult pageCheckResul) {
-		final List<WrongSentence> wrongSentences = new LinkedList<WrongSentence>();
 		final Matcher matcher = WORD_PATTERN.matcher(text);
 		WrongSentence currentSentense = null;
 
 		while (matcher.find()) {
 			final String found = matcher.group();
-			final Matcher innermatcher = WORD_PART_PATTERN.matcher(found);
-			final boolean isWordInIt = innermatcher.find();
-			_log.info("found " + found + " " + isWordInIt);
-			final String possibleWord = innermatcher.group();
-			if (!WordChecker.isAWord(possibleWord)) {
-
-				if (currentSentense != null) {
-					_log.debug(possibleWord
-							+ " is not a word I wanna check, but would be added to existed sentence id="
-							+ currentSentense.getId());
-				}
+			final String word = getWordValue(found);
+			if (EMPTY_STRING.equals(word) || word == null) {
+				_log.debug(word + " is skipped");
 				continue;
 			}
-			final String word = possibleWord.toLowerCase();
-			_log.info("trying word " + word);
-			if (getWordChecker().isWordOfOriginalLanguage(word)) {
-				_log.info(word + "of wrong language");
+			final WrongSentenceType wordCheckedResult = WordCheckersHolder
+					.getInstance().checkWord(word);
+			if (wordCheckedResult != WrongSentenceType.OK) {
+				_log.info(word + " is wrong");
 				if (currentSentense == null) {
 					_log.info(word + " started a new sentence");
 					currentSentense = getCurrentSentence(matcher, word,
-							pageCheckResul);
+							pageCheckResult, wordCheckedResult);
 				} else {
-					addNewWordToSentenc(matcher, word, currentSentense);
+					addNewWordToSentence(matcher, word, currentSentense);
 				}
 			} else {
-				_log.debug(word + " of correct language");
+				_log.debug(word + " is correct");
 				if (currentSentense != null) {
-					if (isFarFromPreviousSentence(matcher, currentSentense)) {
-						_log.info(word + " stopped a wrong sentence");
-						closeSentenceAndAddNewWrongSentence(wrongSentences,
-								currentSentense, text);
+					closeSentenceAndAddNewWrongSentence(wrongSentences,
+							currentSentense, text);
+					_log.info("word=" + word + " stopped a wrong sentence="
+							+ currentSentense.getSentence());
 
-						currentSentense = null;
-					}
+					currentSentense = null;
 				}
 			}
 		}
-		pageCheckResul.setLanguageCorrect(wrongSentences.isEmpty());
-		return wrongSentences;
+		pageCheckResult.setHasNoErrors(wrongSentences.isEmpty());
 	}
 
-	private boolean isFarFromPreviousSentence(final Matcher matcher,
-			final WrongSentence sentence) {
-		return matcher.start() - sentence.getEndingIndex() > distanceBetweenSentencesInCharacters;
+	private String getWordValue(final String foundWord) {
+		final Matcher innermatcher = WORD_PART_PATTERN.matcher(foundWord);
+		final boolean isWordInIt = innermatcher.find();
+		_log.info("found " + foundWord + " " + isWordInIt);
+		final String possibleWord = innermatcher.group();
+		if (!WordCheckersHolder.getWordiscanonicalchecker().isWordCorrect(
+				possibleWord, DictionaryHolder.getInstance())) {
+			_log.info(possibleWord + " is not a correct word");
+			return EMPTY_STRING;
+		}
+		final String word = possibleWord.toLowerCase();
+		_log.info("trying word " + word);
+		if (excludedWords.contains(word)) {
+			_log.debug(word + " is excluded");
+			return EMPTY_STRING;
+		}
+		return word;
 	}
 
 	private WrongSentence getCurrentSentence(final Matcher matcher,
-			final String word, final PageCheckResult pageCheckResul) {
-		final WrongSentence sentence = new WrongSentence();
+			final String word, final PageCheckResult pageCheckResul,
+			final WrongSentenceType sentenceType) {
+		final WrongSentence sentence = new WrongSentence(sentenceType);
 		sentence.setBeginningIndex(matcher.start());
 		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length());
 		sentence.setParentPage(pageCheckResul);
@@ -127,7 +120,7 @@ public class TextChecker {
 		return sentence;
 	}
 
-	private void addNewWordToSentenc(final Matcher matcher, final String word,
+	private void addNewWordToSentence(final Matcher matcher, final String word,
 			final WrongSentence sentence) {
 		_log.debug(word + "continued a wrong sentence which started at"
 				+ sentence.getBeginningIndex());
@@ -139,16 +132,14 @@ public class TextChecker {
 			final List<WrongSentence> sentences, final WrongSentence sentence,
 			final String text) {
 		sentence.setSentenceByText(text);
-		if (sentence.isSentenceLongEnaugh(minimumLengthOfSsentenceInWords)) {
+		if (sentence.isSentenceLongEnaugh()) {
 			sentences.add(sentence);
-			_log.info("\"" + sentence.getSentence()
-					+ "\" added to previously found on "
+			_log.info("\"" + sentence.getSentence() + "\" added to url "
 					+ sentence.getParentPage().getUrl());
 		} else {
 			_log.info("\"" + sentence.getSentence()
 					+ "\" is too short to be considered");
 		}
-
 	}
 
 }

@@ -10,10 +10,12 @@ public class WrongSentence {
 	private int endingIndex = -1;
 	private PageCheckResult parentPage;
 	private int amountOfAddedWords = 0;
+	private WrongSentenceType sentenceType;
 
-	public WrongSentence() {
+	public WrongSentence(final WrongSentenceType sentenceType) {
 		super();
 		id = UUID.randomUUID();
+		this.sentenceType = sentenceType;
 	}
 
 	public PageCheckResult getParentPage() {
@@ -63,9 +65,9 @@ public class WrongSentence {
 	@Override
 	public String toString() {
 		return new StringBuilder().append("\"").append(parentPage.getUrl())
-				.append("\", \"").append(sentence).append("\", ")
-				.append(beginningIndex).append(", ").append(endingIndex)
-				.toString();
+				.append("\", \"").append(sentence).append("\", \"")
+				.append(sentenceType).append("\", ").append(beginningIndex)
+				.append(", ").append(endingIndex).toString();
 	}
 
 	public int getAmountOfAddedWords() {
@@ -80,8 +82,17 @@ public class WrongSentence {
 		amountOfAddedWords++;
 	}
 
-	public boolean isSentenceLongEnaugh(int minimumLengthOfSsentenceInWords) {
-		return getAmountOfAddedWords() >= minimumLengthOfSsentenceInWords;
+	public boolean isSentenceLongEnaugh() {
+		return getAmountOfAddedWords() >= getSentenceType()
+				.getMimumSentenceLength();
+	}
+
+	public WrongSentenceType getSentenceType() {
+		return sentenceType;
+	}
+
+	public void setSentenceType(WrongSentenceType sentenceType) {
+		this.sentenceType = sentenceType;
 	}
 
 }

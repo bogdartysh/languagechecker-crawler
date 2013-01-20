@@ -6,7 +6,7 @@ public class PageCheckResult {
 
 	private UUID id;
 	private String url;
-	private boolean isLanguageCorrect;
+	private boolean hasNoErrors;
 	private boolean isReachable;
 	
 	
@@ -29,16 +29,17 @@ public class PageCheckResult {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public boolean isLanguageCorrect() {
-		return isLanguageCorrect;
-	}
-	public void setLanguageCorrect(boolean isLanguageCorrect) {
-		this.isLanguageCorrect = isLanguageCorrect;
-	}
+	
 	public boolean isReachable() {
 		return isReachable;
 	}
 	public void setReachable(boolean isReachable) {
 		this.isReachable = isReachable;
+	}
+	public boolean isHasNoErrors() {
+		return hasNoErrors;
+	}
+	public void setHasNoErrors(boolean hasNoErrors) {
+		this.hasNoErrors = hasNoErrors;
 	}
 }
