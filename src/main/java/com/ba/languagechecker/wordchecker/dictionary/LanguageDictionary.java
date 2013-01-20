@@ -21,8 +21,8 @@ public class LanguageDictionary {
 	private static final int MAX = 300000;
 	public final Set<String> dictionary = new HashSet<String>(MAX);
 
-	public LanguageDictionary(final String language) throws FileNotFoundException,
-			IOException {
+	public LanguageDictionary(final String language)
+			throws FileNotFoundException, IOException {
 		super();
 		loadDictionaryFile(PATH_TO_DICTIONARY + language
 				+ DICTIONARY_FILE_EXTENSION);
@@ -34,9 +34,13 @@ public class LanguageDictionary {
 		try (Reader reader = new InputStreamReader(new FileInputStream(
 				dictionaryFileName), "utf-8")) {
 			try (BufferedReader in = new BufferedReader(reader)) {
-				String word;
-				while ((word = in.readLine()) != null) {
-					dictionary.add(word.toLowerCase().trim());
+				String line;
+				while ((line = in.readLine()) != null) {
+					final String[] words = line.split(" ");
+					if (words != null)
+						for (String word : words) {
+							dictionary.add(word.toLowerCase().trim());
+						}
 				}
 			}
 		}

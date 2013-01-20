@@ -7,7 +7,7 @@ public class WordLexicChecker implements ICheckWord {
 
 	@Override
 	public boolean isWordCorrect(String word, DictionaryHolder checker) {
-		return checker.getOriginalLanguageDictionary().isWordInTheDictionary(
+		return checker.getShouldBeLanguageDictionary().isWordInTheDictionary(
 				word);
 	}
 

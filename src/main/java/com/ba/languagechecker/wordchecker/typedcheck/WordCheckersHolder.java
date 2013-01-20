@@ -10,14 +10,13 @@ import com.ba.languagechecker.entities.WrongSentenceType;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 
-
 public class WordCheckersHolder {
-	
+
 	private final static ICheckWord wordIsCanonicalChecker = new WordIsCanonicalChecker();
 	private final static ICheckWord wordLanguageChecker = new WordLanguageChecker();
 	private final static ICheckWord wordLexicChecker = new WordLexicChecker();
-	private static Logger _log = Logger
-			.getLogger(WordCheckersHolder.class.getCanonicalName());
+	private static Logger _log = Logger.getLogger(WordCheckersHolder.class
+			.getCanonicalName());
 
 	private List<ICheckWord> checkers;
 
@@ -29,13 +28,14 @@ public class WordCheckersHolder {
 
 	public void setProperties(final TaskProperties taskProperties) {
 		checkers = new LinkedList<ICheckWord>();
-		if (taskProperties.IsLexicCheckable()) {
-			_log.info("lexic will be checked");
-			checkers.add(wordLexicChecker);
-		}
 		if (taskProperties.IsLanguageCheckable()) {
 			_log.info("language will be checked");
 			checkers.add(wordLanguageChecker);
+		}
+
+		if (taskProperties.IsLexicCheckable()) {
+			_log.info("lexic will be checked");
+			checkers.add(wordLexicChecker);
 		}
 
 	}
@@ -43,8 +43,6 @@ public class WordCheckersHolder {
 	public static ICheckWord getWordiscanonicalchecker() {
 		return wordIsCanonicalChecker;
 	}
-	
-	
 
 	public static ICheckWord getWordlanguagechecker() {
 		return wordLanguageChecker;
