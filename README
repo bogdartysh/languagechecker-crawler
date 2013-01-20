@@ -1,1 +1,19 @@
+This crawler is designed for single purpouse:  to check that available web site (or portion of it) is fully translated from one language to another.
+
+To use it one needs:
+1. install java jdk (at least 1.7 version)
+2. install maven (maven.apache.org)
+3. open terminal and execute
+3.1 mvn clean install
+3.2 mvn assembly:single
+3.3 cd target
+3.4 adjust settings of the project (file task.properties)
+3.5 execute : java -jar -Xsx1024m -Xmx1024 languagechecker-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar >results.csv
+results will be in results.csv (some times in cases of error that csv will be not readable in OpenOffice, so please check it with editor first).
+log files are in target/logs
+Dictionary files of you language should be named as ru.dict, en.dict, pl.dict and be places in target/dict folder. These files should be in utf-8 encoding and should consist of all words of chosen language.
+For example please see en.dict and pl.dict files (they are extracted from aspell project)
+
+
+
 For license info please see license file
