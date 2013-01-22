@@ -18,8 +18,13 @@ public class TaskProperties extends Properties {
 	}
 
 	public List<String> getStartUrls() {
-		return getListedValues("start_url");
+		return getListedValues("start_urls");
 	}
+
+	public List<String> getExcludedUrls() {
+		return getListedValues("excluded_urls");
+	}
+
 
 	public boolean IsPageTitleCheckable() {
 		return Boolean.valueOf(getProperty("check_page_title", "true"));

@@ -32,6 +32,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 					+ "|png|tiff?|mid|mp2|mp3|mp4"
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
+	private static List<String> excludedUrls;
 	
 	private static String urlPatternRegexExpression;
 
@@ -50,10 +51,12 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	@Override
 	public boolean shouldVisit(final WebURL url) {
 		final String href = url.getURL().toLowerCase();
-		final boolean res = !FILTERS.matcher(href).matches()
+		boolean res = !FILTERS.matcher(href).matches()
 				&& parentUrlFilterRegex.matcher(href).matches();
+		if (excludedUrls.contains(href))
+			res = false;
 		if (!res)
-			_log.debug(url.getURL() + " should not be visited");
+			_log.debug(url.getURL() + " should not be visited");		
 		return res;
 	}
 
@@ -114,6 +117,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		IsPageTitleCheckable = taskProperties.IsPageTitleCheckable();
 		IsPageTextCheckable = taskProperties.IsPageTextCheckable();
 		IsOnlyBodyCheckable = taskProperties.IsOnlyBodyCheckable();
+		excludedUrls = taskProperties.getExcludedUrls();
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
 		WordCheckersHolder.getInstance().setProperties(taskProperties);
 		textChecker = new TextChecker(taskProperties);
