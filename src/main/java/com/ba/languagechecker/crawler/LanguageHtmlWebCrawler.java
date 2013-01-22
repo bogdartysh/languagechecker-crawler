@@ -13,6 +13,7 @@ import com.ba.languagechecker.entities.SentenceResult;
 import com.ba.languagechecker.pagechecker.CheckerUrlVisitable;
 import com.ba.languagechecker.pagechecker.HtmlPageChecker;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
+import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
@@ -70,7 +71,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 
 
 	public static void uploadProperties(final TaskProperties taskProperties,
-			final Properties crawlerProperties) throws FileNotFoundException,
+			final CrawlerProperties crawlerProperties) throws FileNotFoundException,
 			IOException {
 
 		crawlerHtmlPageChecker = CheckerUrlVisitable.getInstance();

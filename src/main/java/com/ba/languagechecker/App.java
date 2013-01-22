@@ -11,6 +11,7 @@ import com.ba.languagechecker.crawler.LanguageCheckerCrawlController;
 import com.ba.languagechecker.crawler.LanguageHtmlWebCrawler;
 import com.ba.languagechecker.pagechecker.output.CVSCrawlerOutputStream;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
+import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -25,7 +26,7 @@ public class App {
 	private static Logger _log = Logger.getLogger(App.class.getCanonicalName());
 
 	private final TaskProperties taskProperties = new TaskProperties();
-	private final Properties crawlerProperties = new Properties();
+	private final CrawlerProperties crawlerProperties = new CrawlerProperties();
 
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException {
