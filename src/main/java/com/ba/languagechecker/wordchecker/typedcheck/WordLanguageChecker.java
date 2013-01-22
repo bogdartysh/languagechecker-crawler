@@ -2,7 +2,7 @@ package com.ba.languagechecker.wordchecker.typedcheck;
 
 import org.apache.log4j.Logger;
 
-import com.ba.languagechecker.entities.WrongSentenceType;
+import com.ba.languagechecker.entities.ResultTypeEnum;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 
 public class WordLanguageChecker implements ICheckWord {
@@ -24,8 +24,8 @@ public class WordLanguageChecker implements ICheckWord {
 	}
 
 	@Override
-	public WrongSentenceType getWrongSentenceType() {
-		return WrongSentenceType.LANGUAGE;
+	public ResultTypeEnum getWrongSentenceType() {
+		return ResultTypeEnum.LANGUAGE;
 	}
 
 

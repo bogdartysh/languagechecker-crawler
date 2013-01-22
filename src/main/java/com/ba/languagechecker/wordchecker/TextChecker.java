@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.ba.languagechecker.entities.PageCheckResult;
-import com.ba.languagechecker.entities.WrongSentence;
-import com.ba.languagechecker.entities.WrongSentenceType;
+import com.ba.languagechecker.entities.PageResult;
+import com.ba.languagechecker.entities.SentenceResult;
+import com.ba.languagechecker.entities.ResultTypeEnum;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
@@ -34,7 +34,10 @@ public class TextChecker {
 	public TextChecker(final TaskProperties taskProperties)
 			throws FileNotFoundException, IOException {
 		super();
-		WrongSentenceType.LANGUAGE.setMimumSentenceLength(Integer
+		
+		
+		
+		ResultTypeEnum.LANGUAGE.setMimumSentenceLength(Integer
 				.valueOf(taskProperties.getProperty(
 						"minimum_length_of_sentence_in_words", "2")));
 		DictionaryHolder.getInstance().loadDictionaries(taskProperties);
@@ -51,11 +54,11 @@ public class TextChecker {
 
 	}
 
-	public void addWrongSentences(List<WrongSentence> wrongSentences,
-			final String text, final PageCheckResult pageCheckResult) {
+	public void addWrongSentences(List<SentenceResult> wrongSentences,
+			final String text, final PageResult pageCheckResult) {
 
 		final Matcher matcher = WORD_PATTERN.matcher(text);
-		WrongSentence currentSentense = null;
+		SentenceResult currentSentense = null;
 
 		while (matcher.find()) {
 			final String found = matcher.group();
@@ -64,9 +67,9 @@ public class TextChecker {
 				_log.debug(word + " is skipped");
 				continue;
 			}
-			final WrongSentenceType wordCheckedResult = WordCheckersHolder
+			final ResultTypeEnum wordCheckedResult = WordCheckersHolder
 					.getInstance().checkWord(word);
-			if (wordCheckedResult != WrongSentenceType.OK) {
+			if (wordCheckedResult != ResultTypeEnum.OK) {
 				_log.info(word + " is wrong");
 				if (currentSentense == null) {
 					_log.info(word + " started a new sentence");
@@ -87,7 +90,7 @@ public class TextChecker {
 				}
 			}
 		}
-		pageCheckResult.setHasNoErrors(wrongSentences.isEmpty());
+		pageCheckResult.setHasErrors(!wrongSentences.isEmpty());
 	}
 
 	private String getWordValue(final String foundWord) {
@@ -109,10 +112,10 @@ public class TextChecker {
 		return word;
 	}
 
-	private WrongSentence getCurrentSentence(final Matcher matcher,
-			final String word, final PageCheckResult pageCheckResul,
-			final WrongSentenceType sentenceType) {
-		final WrongSentence sentence = new WrongSentence(sentenceType);
+	private SentenceResult getCurrentSentence(final Matcher matcher,
+			final String word, final PageResult pageCheckResul,
+			final ResultTypeEnum sentenceType) {
+		final SentenceResult sentence = new SentenceResult(sentenceType);
 		sentence.setBeginningIndex(matcher.start());
 		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length());
 		sentence.setParentPage(pageCheckResul);
@@ -121,7 +124,7 @@ public class TextChecker {
 	}
 
 	private void addNewWordToSentence(final Matcher matcher, final String word,
-			final WrongSentence sentence) {
+			final SentenceResult sentence) {
 		_log.debug(word + "continued a wrong sentence which started at"
 				+ sentence.getBeginningIndex());
 		sentence.setEndingIndex(matcher.start() + word.length());
@@ -129,7 +132,7 @@ public class TextChecker {
 	}
 
 	private void closeSentenceAndAddNewWrongSentence(
-			final List<WrongSentence> sentences, final WrongSentence sentence,
+			final List<SentenceResult> sentences, final SentenceResult sentence,
 			final String text) {
 		sentence.setSentenceByText(text);
 		if (sentence.isSentenceLongEnaugh()) {

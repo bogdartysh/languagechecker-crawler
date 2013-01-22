@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.ba.languagechecker.entities.WrongSentenceType;
+import com.ba.languagechecker.entities.ResultTypeEnum;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 
@@ -52,13 +52,13 @@ public class WordCheckersHolder {
 		return wordLexicChecker;
 	}
 
-	public WrongSentenceType checkWord(final String word) {
+	public ResultTypeEnum checkWord(final String word) {
 		for (ICheckWord checker : checkers) {
 			if (!checker.isWordCorrect(word, DictionaryHolder.getInstance())) {
 				return checker.getWrongSentenceType();
 			}
 		}
-		return WrongSentenceType.OK;
+		return ResultTypeEnum.OK;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.ba.languagechecker.wordchecker.typedcheck;
 
-import com.ba.languagechecker.entities.WrongSentenceType;
+import com.ba.languagechecker.entities.ResultTypeEnum;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 
 public class WordLexicChecker implements ICheckWord {
@@ -12,8 +12,8 @@ public class WordLexicChecker implements ICheckWord {
 	}
 
 	@Override
-	public WrongSentenceType getWrongSentenceType() {
-		return WrongSentenceType.LEXIC;
+	public ResultTypeEnum getWrongSentenceType() {
+		return ResultTypeEnum.LEXIC;
 	}
 
 

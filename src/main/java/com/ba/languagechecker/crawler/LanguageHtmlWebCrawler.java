@@ -8,12 +8,12 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 import org.apache.log4j.Logger;
 
-import org.jsoup.Jsoup;
-
-import com.ba.languagechecker.entities.PageCheckResult;
-import com.ba.languagechecker.entities.WrongSentence;
+import com.ba.languagechecker.entities.PageResult;
+import com.ba.languagechecker.entities.SentenceResult;
+import com.ba.languagechecker.pagechecker.CheckerUrlVisitable;
+import com.ba.languagechecker.pagechecker.HtmlPageChecker;
+import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.TaskProperties;
-import com.ba.languagechecker.wordchecker.TextChecker;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 import java.io.FileNotFoundException;
@@ -21,28 +21,17 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 public class LanguageHtmlWebCrawler extends WebCrawler {
 	private static Logger _log = Logger.getLogger(LanguageHtmlWebCrawler.class
 			.getCanonicalName());
 
-	private final static Pattern FILTERS = Pattern
-			.compile(".*(\\.(css|js|bmp|gif|jpe?g"
-					+ "|png|tiff?|mid|mp2|mp3|mp4"
-					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
-					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
-	private static List<String> excludedUrls;
+	private static CheckerUrlVisitable crawlerHtmlPageChecker;
+
+	private static HtmlPageChecker htmlPageChecker;
 	
-	private static String urlPatternRegexExpression;
+	public static ICrawlerOutputStream outputStream;
 
-	private static Pattern parentUrlFilterRegex;
-
-	private static boolean IsPageTitleCheckable;
-	private static boolean IsPageTextCheckable;
-	private static boolean IsOnlyBodyCheckable;
-
-	private static TextChecker textChecker;
 
 	/**
 	 * You should implement this function to specify whether the given url
@@ -50,14 +39,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	 */
 	@Override
 	public boolean shouldVisit(final WebURL url) {
-		final String href = url.getURL().toLowerCase();
-		boolean res = !FILTERS.matcher(href).matches()
-				&& parentUrlFilterRegex.matcher(href).matches();
-		if (excludedUrls.contains(href))
-			res = false;
-		if (!res)
-			_log.debug(url.getURL() + " should not be visited");		
-		return res;
+		return crawlerHtmlPageChecker.shouldVisitPage(url.getURL());
 	}
 
 	/**
@@ -68,58 +50,36 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	public void visit(final Page page) {
 		final String url = page.getWebURL().getURL();
 		logger.info("URL: " + url);
-
+		final PageResult pageCheckResult = new PageResult(url, true);
+		final List<SentenceResult> sentences = new LinkedList<SentenceResult>();
+		
 		if (page.getParseData() instanceof HtmlParseData) {
-			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+			final HtmlParseData htmlParseData = (HtmlParseData) page
+					.getParseData();
 			final String title = htmlParseData.getTitle();
-			String text = htmlParseData.getText();
-			final String html = htmlParseData.getHtml();
-
-			final List<WebURL> links = htmlParseData.getOutgoingUrls();
-			logger.debug("Title: " + title);
-			logger.debug("Text length: " + text.length());
-			logger.debug("Html length: " + html.length());
-			logger.debug("Number of outgoing links: " + links.size());
-			final PageCheckResult pageCheckResult = new PageCheckResult(url,
-					true);
-			final List<WrongSentence> sentences = new LinkedList<WrongSentence>();
+			final String text = htmlParseData.getText();
+			final String html = htmlParseData.getHtml();		
 			
-			if (IsOnlyBodyCheckable) {
-				text = Jsoup.parse(html).select("body").text();
-				logger.debug("parsed text is " + text +" of + " + html);
-			}
+			htmlPageChecker.checkHtmlParsedData(sentences, pageCheckResult,
+					text, html, title, url);
 
-			if (IsPageTextCheckable)
-				textChecker.addWrongSentences(sentences,
-						text, pageCheckResult);
-			if (IsPageTitleCheckable)
-				textChecker.addWrongSentences(sentences,
-						title, pageCheckResult);
-
-			saveSentences(sentences, url);
 		}
+		outputStream.saveSentences(pageCheckResult, sentences);
 	}
 
-	private void saveSentences(final List<WrongSentence> sentences,
-			final String url) {
-		for (WrongSentence sentence : sentences) {
-			System.out.println(sentence.toString());
-		}
 
-	}
 
-	public static void prepareCrawler(final TaskProperties taskProperties,
+	public static void uploadProperties(final TaskProperties taskProperties,
 			final Properties crawlerProperties) throws FileNotFoundException,
 			IOException {
 
-		_log.info(" url_pattern = " + taskProperties.getProperty("url_pattern"));
-		urlPatternRegexExpression = taskProperties.getProperty("url_pattern");
-		IsPageTitleCheckable = taskProperties.IsPageTitleCheckable();
-		IsPageTextCheckable = taskProperties.IsPageTextCheckable();
-		IsOnlyBodyCheckable = taskProperties.IsOnlyBodyCheckable();
-		excludedUrls = taskProperties.getExcludedUrls();
-		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
+		crawlerHtmlPageChecker = CheckerUrlVisitable.getInstance();
+		crawlerHtmlPageChecker.uploadTaskProperties(taskProperties);
+
+		htmlPageChecker = HtmlPageChecker.getInstance();
+		htmlPageChecker.uploadTaskProperties(taskProperties);
+	
 		WordCheckersHolder.getInstance().setProperties(taskProperties);
-		textChecker = new TextChecker(taskProperties);
+
 	}
 }

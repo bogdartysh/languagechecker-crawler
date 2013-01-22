@@ -2,7 +2,7 @@ package com.ba.languagechecker.wordchecker.typedcheck;
 
 import java.util.regex.Pattern;
 
-import com.ba.languagechecker.entities.WrongSentenceType;
+import com.ba.languagechecker.entities.ResultTypeEnum;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 
 public class WordIsCanonicalChecker implements ICheckWord {
@@ -24,8 +24,8 @@ public class WordIsCanonicalChecker implements ICheckWord {
 	}
 
 	@Override
-	public WrongSentenceType getWrongSentenceType() {
-		return WrongSentenceType.IS_NOT_A_WORD;
+	public ResultTypeEnum getWrongSentenceType() {
+		return ResultTypeEnum.IS_NOT_A_WORD;
 	}
 
 

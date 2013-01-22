@@ -2,27 +2,27 @@ package com.ba.languagechecker.entities;
 
 import java.util.UUID;
 
-public class WrongSentence {
+public class SentenceResult {
 
 	private UUID id;
 	private String sentence;
 	private int beginningIndex = -1;
 	private int endingIndex = -1;
-	private PageCheckResult parentPage;
+	private PageResult parentPage;
 	private int amountOfAddedWords = 0;
-	private WrongSentenceType sentenceType;
+	private ResultTypeEnum sentenceType;
 
-	public WrongSentence(final WrongSentenceType sentenceType) {
+	public SentenceResult(final ResultTypeEnum sentenceType) {
 		super();
 		id = UUID.randomUUID();
 		this.sentenceType = sentenceType;
 	}
 
-	public PageCheckResult getParentPage() {
+	public PageResult getParentPage() {
 		return parentPage;
 	}
 
-	public void setParentPage(PageCheckResult parentSentence) {
+	public void setParentPage(PageResult parentSentence) {
 		this.parentPage = parentSentence;
 	}
 
@@ -62,8 +62,8 @@ public class WrongSentence {
 		setSentence(text.substring(beginningIndex, endingIndex));
 	}
 
-	@Override
-	public String toString() {
+
+	public String toCSVString() {
 		return new StringBuilder().append("\"").append(parentPage.getUrl())
 				.append("\", \"").append(sentence).append("\", \"")
 				.append(sentenceType).append("\", ").append(beginningIndex)
@@ -87,12 +87,13 @@ public class WrongSentence {
 				.getMimumSentenceLength();
 	}
 
-	public WrongSentenceType getSentenceType() {
+	public ResultTypeEnum getSentenceType() {
 		return sentenceType;
 	}
 
-	public void setSentenceType(WrongSentenceType sentenceType) {
+	public void setSentenceType(ResultTypeEnum sentenceType) {
 		this.sentenceType = sentenceType;
 	}
+
 
 }

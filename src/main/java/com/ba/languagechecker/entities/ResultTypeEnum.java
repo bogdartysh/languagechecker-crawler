@@ -1,6 +1,6 @@
 package com.ba.languagechecker.entities;
 
-public enum WrongSentenceType {
+public enum ResultTypeEnum {
 	LEXIC, LANGUAGE, IS_NOT_A_WORD, MULTIPLE, OK;
 	private int mimumSentenceLength = 0;
 

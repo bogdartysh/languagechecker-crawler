@@ -1,6 +1,7 @@
 package com.ba.languagechecker.properties;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -44,6 +45,10 @@ public class TaskProperties extends Properties {
 	public boolean IsOnlyBodyCheckable() {
 		return Boolean.valueOf(getProperty("check_only_page_body", "false"));
 	}
+	
+	public boolean ShouldSaveWrongSentences() {
+		return Boolean.valueOf(getProperty("save_wrong_sentences", "true"));
+	}
 
 
 	public List<String> getExcludedWordsFromChecking() {
@@ -61,6 +66,10 @@ public class TaskProperties extends Properties {
 		for (String value : valueList)
 			_log.debug(propertyName + " is " + value);
 		return valueList;
+	}
+	
+	public String getOutputFileName() {
+		return getProperty("output_csv_file_name", (new Date().getTime() / 1000L)+"_out.csv");
 	}
 
 }
