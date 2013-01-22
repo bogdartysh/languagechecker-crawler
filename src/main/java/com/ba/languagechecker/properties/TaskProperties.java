@@ -36,6 +36,10 @@ public class TaskProperties extends Properties {
 	public boolean IsLanguageCheckable() {
 		return Boolean.valueOf(getProperty("check_page_language", "true"));
 	}
+	public boolean IsOnlyBodyCheckable() {
+		return Boolean.valueOf(getProperty("check_only_page_body", "false"));
+	}
+
 
 	public List<String> getExcludedWordsFromChecking() {
 		return getListedValues("excluded_words_from_checking");

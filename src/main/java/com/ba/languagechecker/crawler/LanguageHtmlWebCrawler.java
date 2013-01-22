@@ -8,6 +8,8 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 import org.apache.log4j.Logger;
 
+import org.jsoup.Jsoup;
+
 import com.ba.languagechecker.entities.PageCheckResult;
 import com.ba.languagechecker.entities.WrongSentence;
 import com.ba.languagechecker.properties.TaskProperties;
@@ -30,12 +32,14 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 					+ "|png|tiff?|mid|mp2|mp3|mp4"
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
+	
 	private static String urlPatternRegexExpression;
 
 	private static Pattern parentUrlFilterRegex;
 
 	private static boolean IsPageTitleCheckable;
 	private static boolean IsPageTextCheckable;
+	private static boolean IsOnlyBodyCheckable;
 
 	private static TextChecker textChecker;
 
@@ -63,10 +67,10 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		logger.info("URL: " + url);
 
 		if (page.getParseData() instanceof HtmlParseData) {
-			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String title = htmlParseData.getTitle();
+			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+			final String title = htmlParseData.getTitle();
 			String text = htmlParseData.getText();
-			String html = htmlParseData.getHtml();
+			final String html = htmlParseData.getHtml();
 
 			final List<WebURL> links = htmlParseData.getOutgoingUrls();
 			logger.debug("Title: " + title);
@@ -76,6 +80,11 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 			final PageCheckResult pageCheckResult = new PageCheckResult(url,
 					true);
 			final List<WrongSentence> sentences = new LinkedList<WrongSentence>();
+			
+			if (IsOnlyBodyCheckable) {
+				text = Jsoup.parse(html).select("body").text();
+				logger.debug("parsed text is " + text +" of + " + html);
+			}
 
 			if (IsPageTextCheckable)
 				textChecker.addWrongSentences(sentences,
@@ -104,6 +113,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		urlPatternRegexExpression = taskProperties.getProperty("url_pattern");
 		IsPageTitleCheckable = taskProperties.IsPageTitleCheckable();
 		IsPageTextCheckable = taskProperties.IsPageTextCheckable();
+		IsOnlyBodyCheckable = taskProperties.IsOnlyBodyCheckable();
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
 		WordCheckersHolder.getInstance().setProperties(taskProperties);
 		textChecker = new TextChecker(taskProperties);
