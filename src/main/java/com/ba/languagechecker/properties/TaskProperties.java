@@ -17,7 +17,8 @@ public class TaskProperties extends Properties {
 	public TaskProperties() {
 		super();
 	}
-
+	
+	
 	public List<String> getStartUrls() {
 		return getListedValues("start_urls");
 	}
@@ -70,6 +71,10 @@ public class TaskProperties extends Properties {
 	
 	public String getOutputFileName() {
 		return getProperty("output_csv_file_name", (new Date().getTime() / 1000L)+"_out.csv");
+	}
+
+	public List<String> getSeleniumFiles() {
+		return getListedValues("selenium_test_files");
 	}
 
 }
