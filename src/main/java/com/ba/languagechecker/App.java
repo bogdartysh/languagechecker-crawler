@@ -34,8 +34,10 @@ public class App {
 				CRAWLER_PROPERTIES_FILE_NAME)) {
 			try (final ICrawlerOutputStream crawlerOutputStream = new CVSCrawlerOutputStream()) {
 				app.crawlerProperties.load(crawlerPropertiesFileStream);
+				final String taskPropertiesFileName = (args.length > 0) ? args[0] : TASK_PROPERTIES_FILE_NAME;
+					
 				try (final FileInputStream faskPropertiesFileStream = new FileInputStream(
-						TASK_PROPERTIES_FILE_NAME)) {
+						taskPropertiesFileName)) {
 
 					app.taskProperties.load(faskPropertiesFileStream);
 					crawlerOutputStream
