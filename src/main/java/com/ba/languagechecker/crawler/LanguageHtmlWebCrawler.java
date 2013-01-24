@@ -80,7 +80,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		htmlPageChecker = HtmlPageChecker.getInstance();
 		htmlPageChecker.uploadTaskProperties(taskProperties);
 	
-		WordCheckersHolder.getInstance().setProperties(taskProperties);
+		
 
 	}
 }

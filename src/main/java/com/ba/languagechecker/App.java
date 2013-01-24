@@ -13,6 +13,7 @@ import com.ba.languagechecker.pagechecker.output.CVSCrawlerOutputStream;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
+import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -43,11 +44,26 @@ public class App {
 					app.taskProperties.load(faskPropertiesFileStream);
 					crawlerOutputStream
 							.uploadTaskProperties(app.taskProperties);
+					WordCheckersHolder.getInstance().setProperties(app.taskProperties);
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 
 					LanguageHtmlWebCrawler.uploadProperties(app.taskProperties,
 							app.crawlerProperties);
 					LanguageHtmlWebCrawler.outputStream = crawlerOutputStream;
-
 					/*
 					 * crawlStorageFolder is a folder where intermediate crawl
 					 * data is stored.

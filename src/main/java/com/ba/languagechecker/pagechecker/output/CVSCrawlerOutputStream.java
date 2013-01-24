@@ -16,7 +16,8 @@ public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
 
 	@Override
 	public void saveSentences(final PageResult pageCheckResult,
-			final List<SentenceResult> sentences) {
+			final List<SentenceResult> sentences) {		
+		printStream.println("\"URL\", \"sentence\",\"ERROR_TYPE\", \"POSITION_START_INDEX\",\"POSITION_END_INDEX\"");
 		if (ShouldOutPutWrongSentences)
 			for (SentenceResult sentence : sentences) {
 				printStream.println(sentence.toCSVString());
