@@ -17,14 +17,9 @@ public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
 	@Override
 	public void saveSentences(final PageResult pageCheckResult,
 			final List<SentenceResult> sentences) {
-
 		if (ShouldOutPutWrongSentences) {
-			if (sentences.size() > 0) {
-				printStream
-						.println("\"URL\", \"sentence\",\"ERROR_TYPE\", \"POSITION_START_INDEX\",\"POSITION_END_INDEX\"");
-				for (SentenceResult sentence : sentences) {
-					printStream.println(sentence.toCSVString());
-				}
+			for (SentenceResult sentence : sentences) {
+				printStream.println(sentence.toCSVString());
 			}
 		} else
 			printStream.println(pageCheckResult.toCSVString());
@@ -43,6 +38,11 @@ public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
 		ShouldOutPutWrongSentences = taskProperties.ShouldSaveWrongSentences();
 		printStream = new PrintStream(new FileOutputStream(
 				taskProperties.getOutputFileName()));
+		if (ShouldOutPutWrongSentences) {
+			printStream
+					.println("\"URL\", \"sentence\",\"ERROR_TYPE\", \"POSITION_START_INDEX\",\"POSITION_END_INDEX\"");
+		}
+
 	}
 
 }
