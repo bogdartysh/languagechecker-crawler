@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ba.languagechecker.entities.PageResult;
 import com.ba.languagechecker.entities.SentenceResult;
+import com.ba.languagechecker.entities.TaskResult;
 import com.ba.languagechecker.properties.TaskProperties;
 
 public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
@@ -38,11 +39,16 @@ public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
 		ShouldOutPutWrongSentences = taskProperties.ShouldSaveWrongSentences();
 		printStream = new PrintStream(new FileOutputStream(
 				taskProperties.getOutputFileName()));
+		
+
+	}
+
+	@Override
+	public void saveTaskResult(TaskResult taskResult) {
 		if (ShouldOutPutWrongSentences) {
 			printStream
 					.println("\"URL\", \"sentence\",\"ERROR_TYPE\", \"POSITION_START_INDEX\",\"POSITION_END_INDEX\"");
-		}
-
+		}		
 	}
 
 }

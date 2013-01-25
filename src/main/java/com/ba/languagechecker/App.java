@@ -40,15 +40,17 @@ public class App {
 
 				try (final FileInputStream faskPropertiesFileStream = new FileInputStream(
 						taskPropertiesFileName)) {
-
-					app.taskProperties.load(faskPropertiesFileStream);
-					crawlerOutputStream
-							.uploadTaskProperties(app.taskProperties);
-					WordCheckersHolder.getInstance().setProperties(
-							app.taskProperties);
 					final String taskExternalId = app.taskProperties
 							.getTaskExternalId();
 					final TaskResult taskResult = new TaskResult(taskExternalId);
+					
+					app.taskProperties.load(faskPropertiesFileStream);
+					crawlerOutputStream
+							.uploadTaskProperties(app.taskProperties);
+					crawlerOutputStream.saveTaskResult(taskResult);
+					WordCheckersHolder.getInstance().setProperties(
+							app.taskProperties);
+					
 
 					LanguageHtmlWebCrawler.setTaskResult(taskResult);
 					LanguageHtmlWebCrawler.uploadProperties(app.taskProperties,
