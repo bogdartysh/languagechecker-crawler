@@ -8,11 +8,13 @@ public class PageResult {
 	private String url;
 	private boolean hasErrors;
 	private boolean isReachable;
+	private TaskResult taskResult;
 
-	public PageResult(String url, boolean isReachable) {
+	public PageResult(String url, boolean isReachable, TaskResult taskResult) {
 		super();
 		this.url = url;
 		this.isReachable = isReachable;
+		this.taskResult = taskResult;
 		id = UUID.randomUUID();
 	}
 
@@ -50,7 +52,14 @@ public class PageResult {
 
 	public String toCSVString() {
 		return new StringBuilder().append("\"").append(url).append("\", ")
-				.append(hasErrors).append(", ").append(isReachable)
-				.toString();
+				.append(hasErrors).append(", ").append(isReachable).toString();
+	}
+
+	public TaskResult getTaskResult() {
+		return taskResult;
+	}
+
+	public void setTaskResult(TaskResult taskResult) {
+		this.taskResult = taskResult;
 	}
 }

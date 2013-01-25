@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.PageResult;
 import com.ba.languagechecker.entities.SentenceResult;
+import com.ba.languagechecker.entities.TaskResult;
 import com.ba.languagechecker.pagechecker.CheckerUrlVisitable;
 import com.ba.languagechecker.pagechecker.HtmlPageChecker;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
@@ -32,6 +33,8 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	private static HtmlPageChecker htmlPageChecker;
 	
 	public static ICrawlerOutputStream outputStream;
+	
+	private static TaskResult taskResult;
 
 
 	/**
@@ -51,7 +54,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	public void visit(final Page page) {
 		final String url = page.getWebURL().getURL();
 		logger.info("URL: " + url);
-		final PageResult pageCheckResult = new PageResult(url, true);
+		final PageResult pageCheckResult = new PageResult(url, true, taskResult);
 		final List<SentenceResult> sentences = new LinkedList<SentenceResult>();
 		
 		if (page.getParseData() instanceof HtmlParseData) {
@@ -82,5 +85,13 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	
 		
 
+	}
+
+	public static TaskResult getTaskResult() {
+		return taskResult;
+	}
+
+	public static void setTaskResult(TaskResult taskResult) {
+		LanguageHtmlWebCrawler.taskResult = taskResult;
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.ba.languagechecker.entities.ResultTypeEnum;
+import com.ba.languagechecker.entities.types.ResultTypeEnum;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 

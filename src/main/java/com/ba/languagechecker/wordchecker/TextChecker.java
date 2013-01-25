@@ -2,6 +2,7 @@ package com.ba.languagechecker.wordchecker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,14 +11,14 @@ import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.PageResult;
 import com.ba.languagechecker.entities.SentenceResult;
-import com.ba.languagechecker.entities.ResultTypeEnum;
+import com.ba.languagechecker.entities.types.ResultTypeEnum;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 public class TextChecker {
-	private static Logger _log = Logger
-			.getLogger(TextChecker.class.getCanonicalName());
+	private static Logger _log = Logger.getLogger(TextChecker.class
+			.getCanonicalName());
 	private static final String EMPTY_STRING = "";
 	private static final String WORD_PART_PATTERN_EXPR = "[\\p{L}a-zA-Z]+";
 	private static final Pattern WORD_PART_PATTERN = Pattern
@@ -34,9 +35,7 @@ public class TextChecker {
 	public TextChecker(final TaskProperties taskProperties)
 			throws FileNotFoundException, IOException {
 		super();
-		
-		
-		
+
 		ResultTypeEnum.LANGUAGE.setMimumSentenceLength(Integer
 				.valueOf(taskProperties.getProperty(
 						"minimum_length_of_sentence_in_words", "2")));
@@ -93,6 +92,13 @@ public class TextChecker {
 		pageCheckResult.setHasErrors(!wrongSentences.isEmpty());
 	}
 
+	public List<SentenceResult> getWrongSentences(final String text,
+			final PageResult pageCheckResult) {
+		final List<SentenceResult> wrongSentences = new LinkedList<SentenceResult>();
+		addWrongSentences(wrongSentences, text, pageCheckResult);
+		return wrongSentences;
+	}
+
 	private String getWordValue(final String foundWord) {
 		final Matcher innermatcher = WORD_PART_PATTERN.matcher(foundWord);
 		final boolean isWordInIt = innermatcher.find();
@@ -132,8 +138,8 @@ public class TextChecker {
 	}
 
 	private void closeSentenceAndAddNewWrongSentence(
-			final List<SentenceResult> sentences, final SentenceResult sentence,
-			final String text) {
+			final List<SentenceResult> sentences,
+			final SentenceResult sentence, final String text) {
 		sentence.setSentenceByText(text);
 		if (sentence.isSentenceLongEnaugh()) {
 			sentences.add(sentence);

@@ -1,4 +1,4 @@
-package com.ba.languagechecker.entities;
+package com.ba.languagechecker.entities.types;
 
 public enum ResultTypeEnum {
 	LEXIC, LANGUAGE, IS_NOT_A_WORD, MULTIPLE, OK;

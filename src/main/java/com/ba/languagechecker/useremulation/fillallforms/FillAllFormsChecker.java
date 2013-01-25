@@ -16,6 +16,7 @@ import com.ba.languagechecker.entities.TaskResult;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.useremulation.fillallforms.repository.CheckedUrlsRepository;
+import com.ba.languagechecker.wordchecker.TextChecker;
 
 public class FillAllFormsChecker implements Callable<Integer> {
 	private static Logger _log = Logger.getLogger(FillAllFormsChecker.class
@@ -26,6 +27,7 @@ public class FillAllFormsChecker implements Callable<Integer> {
 
 	private boolean shouldCheckDirectedNewUrls = false;
 	private int numberOfRetries = 1;
+	private TextChecker textChecker;
 	private TaskResult taskResult;
 	private Set<String> urlsToCheck = new HashSet<String>();
 	private CheckedUrlsRepository checkedUrlsRepository;
@@ -92,7 +94,7 @@ public class FillAllFormsChecker implements Callable<Integer> {
 					+ taskResult.getId());
 			final FillFormsOfSinglePage fillPage = new FillFormsOfSinglePage(
 					url, checkedUrlsRepository, shouldCheckDirectedNewUrls,
-					numberOfRetries, taskResult);
+					numberOfRetries, taskResult, textChecker);
 			futures.add(pool.submit(fillPage));
 		}
 		_log.info("Done: submitting all urls for task with id="
@@ -116,6 +118,14 @@ public class FillAllFormsChecker implements Callable<Integer> {
 
 	public void setTaskResult(TaskResult taskResult) {
 		this.taskResult = taskResult;
+	}
+
+	public TextChecker getTextChecker() {
+		return textChecker;
+	}
+
+	public void setTextChecker(TextChecker textChecker) {
+		this.textChecker = textChecker;
 	}
 
 }

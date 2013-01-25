@@ -90,4 +90,8 @@ public class TaskProperties extends Properties {
 		return Boolean.valueOf(getProperty(
 				"pages_to_fill_check_directed_to_new_urls", "true"));
 	}
+
+	public String getTaskExternalId() {
+		return getProperty("task_external_id", "unknown");
+	}
 }

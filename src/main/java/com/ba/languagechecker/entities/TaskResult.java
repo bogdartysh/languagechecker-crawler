@@ -10,11 +10,13 @@ public class TaskResult {
 	private Date finished;
 	private Collection<PageResult> pages;
 	private int totalAmountOfParesPages = 0;
+	private String externalId;
 
-	public TaskResult() {
+	public TaskResult(String externalId) {
 		super();
 		id = UUID.randomUUID();
 		started = new Date();
+		this.externalId = externalId;
 	}
 
 	public Date getFinished() {
@@ -59,5 +61,13 @@ public class TaskResult {
 
 	public void incTotalAmountOfParesPages() {
 		totalAmountOfParesPages++;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 }

@@ -2,6 +2,8 @@ package com.ba.languagechecker.entities;
 
 import java.util.UUID;
 
+import com.ba.languagechecker.entities.types.ResultTypeEnum;
+
 public class SentenceResult {
 
 	private UUID id;

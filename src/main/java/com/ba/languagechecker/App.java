@@ -3,12 +3,11 @@ package com.ba.languagechecker;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
-
 import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.crawler.LanguageCheckerCrawlController;
 import com.ba.languagechecker.crawler.LanguageHtmlWebCrawler;
+import com.ba.languagechecker.entities.TaskResult;
 import com.ba.languagechecker.pagechecker.output.CVSCrawlerOutputStream;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
@@ -16,7 +15,6 @@ import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
-import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
@@ -24,6 +22,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 public class App {
 	private final static String TASK_PROPERTIES_FILE_NAME = "task.properties";
 	private final static String CRAWLER_PROPERTIES_FILE_NAME = "crawler.properties";
+	
 	private static Logger _log = Logger.getLogger(App.class.getCanonicalName());
 
 	private final TaskProperties taskProperties = new TaskProperties();
@@ -36,31 +35,22 @@ public class App {
 				CRAWLER_PROPERTIES_FILE_NAME)) {
 			try (final ICrawlerOutputStream crawlerOutputStream = new CVSCrawlerOutputStream()) {
 				app.crawlerProperties.load(crawlerPropertiesFileStream);
-				final String taskPropertiesFileName = (args.length > 0) ? args[0] : TASK_PROPERTIES_FILE_NAME;
-					
+				final String taskPropertiesFileName = (args.length > 0) ? args[0]
+						: TASK_PROPERTIES_FILE_NAME;
+
 				try (final FileInputStream faskPropertiesFileStream = new FileInputStream(
 						taskPropertiesFileName)) {
 
 					app.taskProperties.load(faskPropertiesFileStream);
 					crawlerOutputStream
 							.uploadTaskProperties(app.taskProperties);
-					WordCheckersHolder.getInstance().setProperties(app.taskProperties);
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
+					WordCheckersHolder.getInstance().setProperties(
+							app.taskProperties);
+					final String taskExternalId = app.taskProperties
+							.getTaskExternalId();
+					final TaskResult taskResult = new TaskResult(taskExternalId);
 
+					LanguageHtmlWebCrawler.setTaskResult(taskResult);
 					LanguageHtmlWebCrawler.uploadProperties(app.taskProperties,
 							app.crawlerProperties);
 					LanguageHtmlWebCrawler.outputStream = crawlerOutputStream;

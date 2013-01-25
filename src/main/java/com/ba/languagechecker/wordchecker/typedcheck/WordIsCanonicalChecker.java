@@ -2,7 +2,7 @@ package com.ba.languagechecker.wordchecker.typedcheck;
 
 import java.util.regex.Pattern;
 
-import com.ba.languagechecker.entities.ResultTypeEnum;
+import com.ba.languagechecker.entities.types.ResultTypeEnum;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 
 public class WordIsCanonicalChecker implements ICheckWord {
