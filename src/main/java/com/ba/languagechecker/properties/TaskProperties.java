@@ -69,8 +69,8 @@ public class TaskProperties extends Properties {
 	}
 
 	public String getOutputFileName() {
-		return getProperty("output_csv_file_name",
-				(new Date().getTime() / 1000L) + "_out.csv");
+		return getProperty("output_csv_file_name", getTaskExternalId() + "_"
+				+ (new Date().getTime() / 1000L) + "_out.csv");
 	}
 
 	public List<String> getSeleniumFiles() {
