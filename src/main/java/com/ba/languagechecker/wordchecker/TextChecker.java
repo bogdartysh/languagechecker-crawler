@@ -31,6 +31,7 @@ public class TextChecker {
 			.compile(WORD_PATTERN_EXPR);
 
 	private List<String> excludedWords;
+	private int maxCommonLanguageWords = 0;
 
 	public TextChecker(final TaskProperties taskProperties)
 			throws FileNotFoundException, IOException {
@@ -41,6 +42,7 @@ public class TextChecker {
 						"minimum_length_of_sentence_in_words", "2")));
 		DictionaryHolder.getInstance().loadDictionaries(taskProperties);
 		excludedWords = taskProperties.getExcludedWordsFromChecking();
+		maxCommonLanguageWords = taskProperties.getMaxCommonLanguageWords();
 		_log.info("origin - "
 				+ taskProperties.getProperty("origin_language_code")
 				+ " dest = "
@@ -58,6 +60,7 @@ public class TextChecker {
 
 		final Matcher matcher = WORD_PATTERN.matcher(text);
 		SentenceResult currentSentense = null;
+		int numberOfSkippedWords = 0;
 
 		while (matcher.find()) {
 			final String found = matcher.group();
@@ -74,12 +77,20 @@ public class TextChecker {
 					_log.info(word + " started a new sentence");
 					currentSentense = getCurrentSentence(matcher, word,
 							pageCheckResult, wordCheckedResult);
+					numberOfSkippedWords = 0;
 				} else {
 					addNewWordToSentence(matcher, word, currentSentense);
 				}
 			} else {
 				_log.debug(word + " is correct");
 				if (currentSentense != null) {
+					if (currentSentense.getSentenceType() == ResultTypeEnum.LANGUAGE
+							&& numberOfSkippedWords < maxCommonLanguageWords) {
+						_log.info(word + " is correct, but will continue");
+						numberOfSkippedWords++;
+						continue;
+
+					}
 					closeSentenceAndAddNewWrongSentence(wrongSentences,
 							currentSentense, text);
 					_log.info("word=" + word + " stopped a wrong sentence="
@@ -123,7 +134,8 @@ public class TextChecker {
 			final ResultTypeEnum sentenceType) {
 		final SentenceResult sentence = new SentenceResult(sentenceType);
 		sentence.setBeginningIndex(matcher.start());
-		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length() + 1);
+		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length()
+				+ 1);
 		sentence.setParentPage(pageCheckResul);
 		sentence.incAmountOfAddedWords();
 		return sentence;

@@ -80,6 +80,11 @@ public class TaskProperties extends Properties {
 	public List<String> getPagesToFillAllForms() {
 		return getListedValues("pages_to_fill_all_forms");
 	}
+	
+	public int getMaxCommonLanguageWords() {
+		return Integer.valueOf(getProperty("max_common_language_words",
+				"2"));
+	}
 
 	public int getPagesToFillNumberOfRetries() {
 		return Integer.valueOf(getProperty("pages_to_fil_number_of_retries",
