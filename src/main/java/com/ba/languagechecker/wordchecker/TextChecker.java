@@ -123,7 +123,7 @@ public class TextChecker {
 			final ResultTypeEnum sentenceType) {
 		final SentenceResult sentence = new SentenceResult(sentenceType);
 		sentence.setBeginningIndex(matcher.start());
-		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length());
+		sentence.setEndingIndex(sentence.getBeginningIndex() + word.length() + 1);
 		sentence.setParentPage(pageCheckResul);
 		sentence.incAmountOfAddedWords();
 		return sentence;
