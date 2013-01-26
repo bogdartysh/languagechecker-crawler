@@ -11,6 +11,7 @@ import com.ba.languagechecker.entities.TaskResult;
 import com.ba.languagechecker.properties.TaskProperties;
 
 public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
+	private static final String RESULT_FOLDER = "results/";
 	private PrintStream printStream = null;
 
 	private boolean ShouldOutPutWrongSentences = true;
@@ -38,7 +39,7 @@ public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
 			throws FileNotFoundException {
 		ShouldOutPutWrongSentences = taskProperties.ShouldSaveWrongSentences();
 		printStream = new PrintStream(new FileOutputStream(
-				taskProperties.getOutputFileName()));
+				RESULT_FOLDER + taskProperties.getOutputFileName()));
 		
 
 	}

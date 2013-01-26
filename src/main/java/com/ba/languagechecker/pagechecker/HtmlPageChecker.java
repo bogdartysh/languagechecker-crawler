@@ -42,7 +42,6 @@ public class HtmlPageChecker implements ICheckPage {
 		String checkedText = text;
 		if (IsOnlyBodyCheckable) {
 			checkedText = Jsoup.parse(html).select("body").text();
-			_log.debug("parsed text is " + checkedText + " of + " + html);
 		}
 
 		if (IsPageTextCheckable)
