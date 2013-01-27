@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.ba.languagechecker.entities.PageResult;
 import com.ba.languagechecker.entities.SentenceResult;
 import com.ba.languagechecker.entities.types.ResultTypeEnum;
+import com.ba.languagechecker.pagechecker.TextManipulator;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
@@ -29,6 +30,7 @@ public class TextChecker {
 			+ WORD_PART_PATTERN_EXPR + SPACE_BEFORE_WORD;
 	private static final Pattern WORD_PATTERN = Pattern
 			.compile(WORD_PATTERN_EXPR);
+	private boolean shouldSkipReferences = false;
 
 	private List<String> excludedWords;
 	private int maxCommonLanguageWords = 0;
@@ -43,6 +45,7 @@ public class TextChecker {
 		DictionaryHolder.getInstance().loadDictionaries(taskProperties);
 		excludedWords = taskProperties.getExcludedWordsFromChecking();
 		maxCommonLanguageWords = taskProperties.getMaxCommonLanguageWords();
+		shouldSkipReferences = taskProperties.shouldSkipReferences();
 		_log.info("origin - "
 				+ taskProperties.getProperty("origin_language_code")
 				+ " dest = "
@@ -55,9 +58,11 @@ public class TextChecker {
 
 	}
 
-	public void addWrongSentences(List<SentenceResult> wrongSentences,
-			final String text, final PageResult pageCheckResult) {
+	public void addWrongSentences(final List<SentenceResult> wrongSentences,
+			final String theText, final PageResult pageCheckResult) {
 
+		final String text = (shouldSkipReferences) ? TextManipulator
+				.getTextWithoutReferences(theText) : theText;
 		final Matcher matcher = WORD_PATTERN.matcher(text);
 		SentenceResult currentSentense = null;
 		int numberOfSkippedWords = 0;
@@ -162,5 +167,4 @@ public class TextChecker {
 					+ "\" is too short to be considered");
 		}
 	}
-
 }

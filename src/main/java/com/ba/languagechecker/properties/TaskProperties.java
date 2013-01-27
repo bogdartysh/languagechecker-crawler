@@ -1,6 +1,7 @@
 package com.ba.languagechecker.properties;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,5 +99,13 @@ public class TaskProperties extends Properties {
 
 	public String getTaskExternalId() {
 		return getProperty("task_external_id", "unknown");
+	}
+
+	public Collection<String> getDivElementsToClear() {
+		return getListedValues("skip_div_ids");
+	}
+	public boolean shouldSkipReferences() {
+		return Boolean.valueOf(getProperty(
+				"skip_references", "false"));
 	}
 }

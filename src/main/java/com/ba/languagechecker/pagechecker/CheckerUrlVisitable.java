@@ -43,6 +43,7 @@ public class CheckerUrlVisitable {
 			_log.debug(url + " should not be visited");
 		return res;
 	}
+	
 
 	public void uploadTaskProperties(final TaskProperties taskProperties) {
 		excludedUrls = taskProperties.getExcludedUrls();
