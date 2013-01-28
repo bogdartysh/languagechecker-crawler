@@ -1,4 +1,4 @@
-package com.ba.languagechecker.useremulation.fillallforms.repository;
+package com.ba.languagechecker.repository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ public class CheckedUrlsRepository {
 		super();
 	}
 
-	public CheckedUrlsRepository getInstance() {
+	public static CheckedUrlsRepository getInstance() {
 		return INSTANCE;
 	}
 

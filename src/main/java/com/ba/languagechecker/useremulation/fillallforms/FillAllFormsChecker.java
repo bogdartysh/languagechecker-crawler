@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import com.ba.languagechecker.entities.TaskResult;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
-import com.ba.languagechecker.useremulation.fillallforms.repository.CheckedUrlsRepository;
+import com.ba.languagechecker.repository.CheckedUrlsRepository;
 import com.ba.languagechecker.wordchecker.TextChecker;
 
 public class FillAllFormsChecker implements Callable<Integer> {
