@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.properties.TaskProperties;
+import com.ba.languagechecker.repository.CheckedUrlsRepository;
 
 public class CheckerUrlVisitable {
 
@@ -19,6 +20,8 @@ public class CheckerUrlVisitable {
 					+ "|png|tiff?|mid|mp2|mp3|mp4"
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
+	
+	private CheckedUrlsRepository checkedUrlsRepository;
 
 	public static CheckerUrlVisitable getInstance() {
 		return INSTANCE;
@@ -39,6 +42,10 @@ public class CheckerUrlVisitable {
 				&& parentUrlFilterRegex.matcher(url).matches();
 		if (excludedUrls.contains(url))
 			res = false;
+		if (checkedUrlsRepository.contains(url)) {
+			_log.info("checkedUrlsRepository - already visited url=" + url);
+			res = false;
+		}
 		if (!res)
 			_log.debug(url + " should not be visited");
 		return res;
@@ -50,6 +57,15 @@ public class CheckerUrlVisitable {
 		_log.info(" url_pattern = " + taskProperties.getProperty("url_pattern"));
 		urlPatternRegexExpression = taskProperties.getProperty("url_pattern");
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
+	}
+
+	public CheckedUrlsRepository getCheckedUrlsRepository() {
+		return checkedUrlsRepository;
+	}
+
+	public void setCheckedUrlsRepository(
+			CheckedUrlsRepository checkedUrlsRepository) {
+		this.checkedUrlsRepository = checkedUrlsRepository;
 	}
 
 }

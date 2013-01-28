@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.TaskResult;
-import com.ba.languagechecker.useremulation.fillallforms.repository.CheckedUrlsRepository;
+import com.ba.languagechecker.repository.CheckedUrlsRepository;
 
 public class CheckLanguageOnSinglePage  implements Callable<Integer>{
 	private static Logger _log = Logger.getLogger(CheckLanguageOnSinglePage.class

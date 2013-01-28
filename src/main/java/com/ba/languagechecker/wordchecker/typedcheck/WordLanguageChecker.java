@@ -10,7 +10,8 @@ public class WordLanguageChecker implements ICheckWord {
 			.getCanonicalName());
 
 	@Override
-	public boolean isWordCorrect(String word, DictionaryHolder dictionary) {
+	public boolean isWordCorrect(final String word,
+			final DictionaryHolder dictionary) {
 		final boolean isOriginal = dictionary.getOriginalLanguageDictionary()
 				.isWordInTheDictionary(word);
 		if (!isOriginal) {
@@ -28,7 +29,4 @@ public class WordLanguageChecker implements ICheckWord {
 		return ResultTypeEnum.LANGUAGE;
 	}
 
-
-	
-	
 }

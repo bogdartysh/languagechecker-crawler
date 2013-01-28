@@ -16,6 +16,7 @@ import com.ba.languagechecker.pagechecker.HtmlPageChecker;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
+import com.ba.languagechecker.repository.CheckedUrlsRepository;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 import java.io.FileNotFoundException;
@@ -31,11 +32,10 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	private static CheckerUrlVisitable crawlerHtmlPageChecker;
 
 	private static HtmlPageChecker htmlPageChecker;
-	
-	public static ICrawlerOutputStream outputStream;
-	
-	private static TaskResult taskResult;
 
+	public static ICrawlerOutputStream outputStream;
+
+	private static TaskResult taskResult;
 
 	/**
 	 * You should implement this function to specify whether the given url
@@ -56,14 +56,14 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		logger.info("URL: " + url);
 		final PageResult pageCheckResult = new PageResult(url, true, taskResult);
 		final List<SentenceResult> sentences = new LinkedList<SentenceResult>();
-		
+
 		if (page.getParseData() instanceof HtmlParseData) {
 			final HtmlParseData htmlParseData = (HtmlParseData) page
 					.getParseData();
 			final String title = htmlParseData.getTitle();
 			final String text = htmlParseData.getText();
-			final String html = htmlParseData.getHtml();		
-			
+			final String html = htmlParseData.getHtml();
+
 			htmlPageChecker.checkHtmlParsedData(sentences, pageCheckResult,
 					text, html, title, url);
 
@@ -71,19 +71,17 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		outputStream.saveSentences(pageCheckResult, sentences);
 	}
 
-
-
 	public static void uploadProperties(final TaskProperties taskProperties,
-			final CrawlerProperties crawlerProperties) throws FileNotFoundException,
-			IOException {
+			final CrawlerProperties crawlerProperties)
+			throws FileNotFoundException, IOException {
 
 		crawlerHtmlPageChecker = CheckerUrlVisitable.getInstance();
+		crawlerHtmlPageChecker.setCheckedUrlsRepository(CheckedUrlsRepository
+				.getInstance());
 		crawlerHtmlPageChecker.uploadTaskProperties(taskProperties);
 
 		htmlPageChecker = HtmlPageChecker.getInstance();
 		htmlPageChecker.uploadTaskProperties(taskProperties);
-	
-		
 
 	}
 

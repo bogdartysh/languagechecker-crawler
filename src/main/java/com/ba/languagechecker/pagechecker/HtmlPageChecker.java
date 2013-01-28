@@ -21,9 +21,6 @@ public class HtmlPageChecker implements ICheckPage {
 	private static Logger _log = Logger.getLogger(CheckerUrlVisitable.class
 			.getCanonicalName());
 
-	private static final String EMPTY_STRING = "";
-	private static final String BODY_ELEMENT_NAME = "body";
-
 	private static final HtmlPageChecker INSTANCE = new HtmlPageChecker();
 
 	private boolean IsPageTitleCheckable;
@@ -46,10 +43,8 @@ public class HtmlPageChecker implements ICheckPage {
 			final PageResult pageResult, final String text, final String html,
 			final String title, final String url) {
 		_log.info("checking url=" + url);
-		String checkedText = text;
-		if (IsOnlyBodyCheckable) {
-			checkedText = getBodyOfHtml(html);
-		}
+		final String checkedText = (IsOnlyBodyCheckable) ? TextManipulator
+				.getBodyOfHtml(html, divElementsToClear) : text;
 
 		if (IsPageTextCheckable)
 			textChecker.addWrongSentences(results, checkedText, pageResult);
@@ -67,20 +62,6 @@ public class HtmlPageChecker implements ICheckPage {
 		IsOnlyBodyCheckable = taskProperties.IsOnlyBodyCheckable();
 		divElementsToClear = taskProperties.getDivElementsToClear();
 		textChecker = new TextChecker(taskProperties);
-	}
-
-	private String getBodyOfHtml(final String html) {
-		final Document document = Jsoup.parse(html);
-		for (String div_id : divElementsToClear) {
-			final Elements divs = document.select(div_id);
-			if (divs == null)
-				continue;
-			final Element div = divs.first();
-			if (div == null)
-				continue;
-			div.text(EMPTY_STRING);
-		}
-		return document.select(BODY_ELEMENT_NAME).text();
 	}
 
 }

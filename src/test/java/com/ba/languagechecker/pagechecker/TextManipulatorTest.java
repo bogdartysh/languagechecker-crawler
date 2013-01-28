@@ -9,6 +9,8 @@ public class TextManipulatorTest extends TestCase {
 	private static final String BEFORE = "before ";
 	private static final String AFTER = " after";
 	private static final String REFENCED_TEXT = " referenced text";
+	
+			
 
 	public TextManipulatorTest(String testName) {
 		super(testName);
@@ -34,6 +36,6 @@ public class TextManipulatorTest extends TestCase {
 				TextManipulator.getTextWithoutReferences(BEFORE + "<<"
 						+ REFENCED_TEXT + ">>" + AFTER));
 
-	}
+	}	
 
 }
