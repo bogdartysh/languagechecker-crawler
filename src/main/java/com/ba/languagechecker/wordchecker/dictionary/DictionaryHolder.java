@@ -29,20 +29,24 @@ public class DictionaryHolder {
 	public void loadDictionaries(final TaskProperties taskProperties)
 			throws FileNotFoundException, IOException {
 		originalLanguageDictionary = getDictionary(taskProperties
-				.getProperty("origin_language_code"));
+				.getProperty("origin_language_code"),
+					taskProperties.couldWordsBeLongerThen31Letters());
 		shouldBeLanguageDictionary = getDictionary(taskProperties
-				.getProperty("shouldbe_language_code"));
+				.getProperty("shouldbe_language_code"), 
+					taskProperties.couldWordsBeLongerThen31Letters());
 		_log.debug("dictionaries loaded");
 	}
 
-	private LanguageDictionary getDictionary(final String languageCode)
+	private LanguageDictionary getDictionary(final String languageCode, 
+			final boolean couldWordsBeLongerThen31Letters)
 			throws FileNotFoundException, IOException {
 		if (availableDictionaries.containsKey(languageCode)) {
 			_log.info(languageCode + " dictionary already loaded");
 			return availableDictionaries.get(languageCode);
 		} else {
 			_log.info("loading dictionary " + languageCode + " dictionary");
-			final LanguageDictionary dict = new LanguageDictionary(languageCode);
+			final LanguageDictionary dict = new LanguageDictionary(languageCode, 
+				couldWordsBeLongerThen31Letters);
 			availableDictionaries.put(languageCode, dict);
 			return dict;
 		}

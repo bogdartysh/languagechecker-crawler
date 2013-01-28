@@ -99,4 +99,11 @@ public class TaskProperties extends Properties {
 	public String getTaskExternalId() {
 		return getProperty("task_external_id", "unknown");
 	}
+
+	public boolean couldWordsBeLongerThen31Letters() {
+		return Boolean.valueOf(getProperty(
+				"could_words_be_longer_then_31_letters", "false"));
+	}
+
+
 }
