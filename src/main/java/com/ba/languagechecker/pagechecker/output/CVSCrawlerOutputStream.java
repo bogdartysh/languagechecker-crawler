@@ -3,6 +3,7 @@ package com.ba.languagechecker.pagechecker.output;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.ba.languagechecker.entities.PageResult;
@@ -36,10 +37,10 @@ public class CVSCrawlerOutputStream implements ICrawlerOutputStream {
 
 	@Override
 	public void uploadTaskProperties(final TaskProperties taskProperties)
-			throws FileNotFoundException {
+			throws FileNotFoundException, UnsupportedEncodingException {
 		ShouldOutPutWrongSentences = taskProperties.ShouldSaveWrongSentences();
 		printStream = new PrintStream(new FileOutputStream(
-				RESULT_FOLDER + taskProperties.getOutputFileName()));
+				RESULT_FOLDER + taskProperties.getOutputFileName()), true, "utf-8");
 		
 
 	}

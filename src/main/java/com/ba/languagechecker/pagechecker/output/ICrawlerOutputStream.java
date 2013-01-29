@@ -1,6 +1,7 @@
 package com.ba.languagechecker.pagechecker.output;
 
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.ba.languagechecker.entities.PageResult;
@@ -13,5 +14,5 @@ public interface ICrawlerOutputStream extends AutoCloseable {
 	public void saveSentences(final PageResult pageCheckResult, final List<SentenceResult> sentences);
 	public void saveTaskResult(final TaskResult taskResult);
 	
-	public void uploadTaskProperties(final TaskProperties taskProperties) throws FileNotFoundException;
+	public void uploadTaskProperties(final TaskProperties taskProperties) throws FileNotFoundException, UnsupportedEncodingException;
 }
