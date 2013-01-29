@@ -61,8 +61,8 @@ public class TextChecker {
 	public void addWrongSentences(final List<SentenceResult> wrongSentences,
 			final String theText, final PageResult pageCheckResult) {
 
-		final String text = (shouldSkipReferences) ? TextManipulator
-				.getTextWithoutReferences(theText) : theText;
+		final String text = ((shouldSkipReferences) ? TextManipulator
+				.getTextWithoutReferences(theText) : theText).toLowerCase();
 		final Matcher matcher = WORD_PATTERN.matcher(text);
 		SentenceResult currentSentense = null;
 		int numberOfSkippedWords = 0;
@@ -119,13 +119,14 @@ public class TextChecker {
 		final Matcher innermatcher = WORD_PART_PATTERN.matcher(foundWord);
 		final boolean isWordInIt = innermatcher.find();
 		_log.info("found " + foundWord + " " + isWordInIt);
-		final String possibleWord = innermatcher.group();
+		if (!isWordInIt)
+			return EMPTY_STRING;
+		final String word = innermatcher.group();
 		if (!WordCheckersHolder.getWordiscanonicalchecker().isWordCorrect(
-				possibleWord, DictionaryHolder.getInstance())) {
-			_log.info(possibleWord + " is not a correct word");
+				word, DictionaryHolder.getInstance())) {
+			_log.info(word + " is not a correct word");
 			return EMPTY_STRING;
 		}
-		final String word = possibleWord.toLowerCase();
 		_log.info("trying word " + word);
 		if (excludedWords.contains(word)) {
 			_log.debug(word + " is excluded");
