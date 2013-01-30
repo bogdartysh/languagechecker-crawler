@@ -17,16 +17,15 @@ import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.repository.CheckedUrlsRepository;
-import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 public class LanguageHtmlWebCrawler extends WebCrawler {
-	private static Logger _log = Logger.getLogger(LanguageHtmlWebCrawler.class
+	private final static Logger _log = Logger.getLogger(LanguageHtmlWebCrawler.class
 			.getCanonicalName());
 
 	private static CheckerUrlVisitable crawlerHtmlPageChecker;

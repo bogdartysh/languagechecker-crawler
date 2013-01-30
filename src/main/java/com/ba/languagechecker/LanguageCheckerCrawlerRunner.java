@@ -1,14 +1,12 @@
 package com.ba.languagechecker;
 
 import java.io.IOException;
-import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.crawler.LanguageCheckerCrawlController;
 import com.ba.languagechecker.crawler.LanguageHtmlWebCrawler;
 import com.ba.languagechecker.entities.TaskResult;
-import com.ba.languagechecker.pagechecker.output.CVSCrawlerOutputStream;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
@@ -24,42 +22,18 @@ public class LanguageCheckerCrawlerRunner implements Runnable {
 			.getLogger(LanguageCheckerCrawlerRunner.class.getCanonicalName());
 	private final TaskProperties taskProperties;
 	private final CrawlerProperties crawlerProperties;
-	private Reader taskPropertiesFileStream = null;
-	private Reader crawlerPropertiesFileStream = null;
+	final ICrawlerOutputStream crawlerOutputStream;
 
 	public LanguageCheckerCrawlerRunner(final TaskProperties taskProperties,
-			final CrawlerProperties crawlerProperties) {
+			final CrawlerProperties crawlerProperties,
+			final ICrawlerOutputStream crawlerOutputStream) {
 		super();
 		this.taskProperties = taskProperties;
 		this.crawlerProperties = crawlerProperties;
-
-	}
-
-	public LanguageCheckerCrawlerRunner(final TaskProperties taskProperties,
-			final CrawlerProperties crawlerProperties,
-			final Reader taskPropertiesFileStream) {
-		this(taskProperties, crawlerProperties);
-		this.taskPropertiesFileStream = taskPropertiesFileStream;
-	}
-
-	public LanguageCheckerCrawlerRunner(final TaskProperties taskProperties,
-			final CrawlerProperties crawlerProperties,
-			final Reader taskPropertiesFileStream,
-			final Reader crawlerPropertiesFileStream) {
-		this(taskProperties, crawlerProperties, taskPropertiesFileStream);
-		this.crawlerPropertiesFileStream = crawlerPropertiesFileStream;
+		this.crawlerOutputStream = crawlerOutputStream;
 	}
 
 	private void loadPropertiesFromReaders() throws IOException {
-		if (crawlerPropertiesFileStream != null) {
-			_log.info("loading crawler properties");
-			crawlerProperties.load(crawlerPropertiesFileStream);
-		}
-
-		if (taskPropertiesFileStream != null) {
-			_log.info("loading task properties");
-			taskProperties.load(taskPropertiesFileStream);
-		}
 
 		WordCheckersHolder.getInstance().setProperties(taskProperties);
 		LanguageHtmlWebCrawler.uploadProperties(taskProperties,
@@ -135,38 +109,32 @@ public class LanguageCheckerCrawlerRunner implements Runnable {
 
 	@Override
 	public void run() {
-		try (final ICrawlerOutputStream crawlerOutputStream = new CVSCrawlerOutputStream()) {
+		try {
 			final TaskResult taskResult = loadTaskResult();
 			crawlerOutputStream.uploadTaskProperties(taskProperties);
 			setTaskResult(taskResult, crawlerOutputStream);
 
-			try {
-				final LanguageCheckerCrawlController controller = getLanguageCheckerCrawlController();
+			final LanguageCheckerCrawlController controller = getLanguageCheckerCrawlController();
 
-				/*
-				 * For each crawl, you need to add some seed urls. These are the
-				 * first URLs that are fetched and then the crawler starts
-				 * following links which are found in these pages
-				 */
-				controller.addSeeds(taskProperties);
+			/*
+			 * For each crawl, you need to add some seed urls. These are the
+			 * first URLs that are fetched and then the crawler starts following
+			 * links which are found in these pages
+			 */
+			controller.addSeeds(taskProperties);
 
-				/*
-				 * Start the crawl. This is a blocking operation, meaning that
-				 * your code will reach the line after this only when crawling
-				 * is finished.
-				 */
-				_log.info("started crawl for task with ExternalId="
-						+ taskResult.getExternalId());
-				controller.start(LanguageHtmlWebCrawler.class, Integer
-						.valueOf(crawlerProperties
-								.getProperty("number_of_crawlers")));
-			} catch (Exception e) {
-				_log.error(e, e);
-			}
-		} catch (Exception e3) {
-			_log.error(e3, e3);
+			/*
+			 * Start the crawl. This is a blocking operation, meaning that your
+			 * code will reach the line after this only when crawling is
+			 * finished.
+			 */
+			_log.info("started crawl for task with ExternalId="
+					+ taskResult.getExternalId());
+			controller.start(LanguageHtmlWebCrawler.class, Integer
+					.valueOf(crawlerProperties
+							.getProperty("number_of_crawlers")));
+		} catch (Exception e) {
+			_log.error(e, e);
 		}
-
 	}
-
 }
