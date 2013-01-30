@@ -16,7 +16,6 @@ import com.ba.languagechecker.pagechecker.HtmlPageChecker;
 import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
-import com.ba.languagechecker.repository.CheckedUrlsRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -74,8 +73,6 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 			throws FileNotFoundException, IOException {
 
 		crawlerHtmlPageChecker = CheckerUrlVisitable.getInstance();
-		crawlerHtmlPageChecker.setCheckedUrlsRepository(CheckedUrlsRepository
-				.getInstance());
 		crawlerHtmlPageChecker.uploadTaskProperties(taskProperties);
 
 		htmlPageChecker = HtmlPageChecker.getInstance();
