@@ -18,15 +18,14 @@ import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.repository.CheckedUrlsRepository;
 
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class LanguageHtmlWebCrawler extends WebCrawler {
-	private final static Logger _log = Logger.getLogger(LanguageHtmlWebCrawler.class
-			.getCanonicalName());
+	private final static Logger _log = Logger
+			.getLogger(LanguageHtmlWebCrawler.class.getCanonicalName());
 
 	private static CheckerUrlVisitable crawlerHtmlPageChecker;
 
@@ -81,6 +80,8 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 
 		htmlPageChecker = HtmlPageChecker.getInstance();
 		htmlPageChecker.uploadTaskProperties(taskProperties);
+		_log.debug("Properties uploaded for task="
+				+ taskProperties.getTaskExternalId());
 
 	}
 
