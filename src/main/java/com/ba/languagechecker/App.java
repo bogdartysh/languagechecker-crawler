@@ -28,9 +28,10 @@ public class App {
 			crawlerProperties.load(crawlerPropertiesFileStream);
 			final String taskPropertiesFileName = (args.length > 0) ? args[0]
 					: TASK_PROPERTIES_FILE_NAME;
-			try (final FileInputStream faskPropertiesFileStream = new FileInputStream(
+			try (final FileInputStream taskPropertiesFileStream = new FileInputStream(
 					taskPropertiesFileName)) {
 				final TaskProperties taskProperties = new TaskProperties();
+				taskProperties.load(taskPropertiesFileStream);
 				try (final OutputStream os = new FileOutputStream(RESULT_FOLDER
 						+ taskProperties.getOutputFileName())) {
 					try (final ICrawlerOutputStream crawlerOutputStream = new CVSCrawlerOutputStream(
