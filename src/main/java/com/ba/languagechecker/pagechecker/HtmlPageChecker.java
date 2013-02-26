@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.PageResult;
 import com.ba.languagechecker.entities.SentenceResult;
+import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 import com.ba.languagechecker.wordchecker.TextChecker;
 
@@ -51,13 +52,14 @@ public class HtmlPageChecker implements ICheckPage {
 	}
 
 	@Override
-	public void uploadTaskProperties(final TaskProperties taskProperties)
+	public void uploadTaskProperties(final TaskProperties taskProperties, 
+			final CrawlerProperties crawlerProperties)
 			throws FileNotFoundException, IOException {
 		IsPageTitleCheckable = taskProperties.IsPageTitleCheckable();
 		IsPageTextCheckable = taskProperties.IsPageTextCheckable();
 		IsOnlyBodyCheckable = taskProperties.IsOnlyBodyCheckable();
 		divElementsToClear = taskProperties.getDivElementsToClear();
-		textChecker = new TextChecker(taskProperties);
+		textChecker = new TextChecker(taskProperties, crawlerProperties);
 	}
 
 }

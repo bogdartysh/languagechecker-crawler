@@ -19,7 +19,7 @@ public class CheckerUrlVisitable {
 					+ "|png|tiff?|mid|mp2|mp3|mp4"
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
 					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
-	
+
 	public static CheckerUrlVisitable getInstance() {
 		return INSTANCE;
 	}
@@ -37,19 +37,20 @@ public class CheckerUrlVisitable {
 
 		boolean res = !FILTERS.matcher(url).matches()
 				&& parentUrlFilterRegex.matcher(url).matches();
-		if (excludedUrls.contains(url))
-			res = false;
-		
+		if (res)
+			if (excludedUrls.contains(url))
+				res = false;
+
 		if (!res)
 			_log.debug(url + " should not be visited");
 		return res;
 	}
-	
 
 	public void uploadTaskProperties(final TaskProperties taskProperties) {
 		excludedUrls = taskProperties.getExcludedUrls();
-		_log.info(" url_pattern = " + taskProperties.getProperty("url_pattern"));
-		urlPatternRegexExpression = taskProperties.getProperty("url_pattern");
+		_log.info(" url_pattern = "
+				+ taskProperties.getUrlPattern());
+		urlPatternRegexExpression = taskProperties.getUrlPattern();
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
 	}
 }

@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
+import com.ba.languagechecker.wordchecker.dictionary.holder.DictionaryHolder;
 
 public class TaskProperties extends Properties {
 	private static final long serialVersionUID = 352354575674356L;
@@ -112,5 +112,17 @@ public class TaskProperties extends Properties {
 	public boolean couldWordsBeLongerThen31Letters() {
 		return Boolean.valueOf(getProperty(
 				"could_words_be_longer_then_31_letters", "false"));
+	}
+	
+	public String getOriginalLanguageCode() {
+		return getProperty("origin_language_code");
+	}
+	
+	public String getShouldBeLanguageCode() {
+		return getProperty("shouldbe_language_code");
+	}
+	
+	public String getUrlPattern() {
+		return getProperty("url_pattern", ".*");
 	}
 }

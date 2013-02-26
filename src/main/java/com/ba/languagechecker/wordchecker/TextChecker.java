@@ -13,8 +13,9 @@ import com.ba.languagechecker.entities.PageResult;
 import com.ba.languagechecker.entities.SentenceResult;
 import com.ba.languagechecker.entities.types.ResultTypeEnum;
 import com.ba.languagechecker.pagechecker.TextManipulator;
+import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
-import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
+import com.ba.languagechecker.wordchecker.dictionary.holder.DictionaryHolder;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 public class TextChecker {
@@ -35,14 +36,16 @@ public class TextChecker {
 	private List<String> excludedWords;
 	private int maxCommonLanguageWords = 0;
 
-	public TextChecker(final TaskProperties taskProperties)
+	public TextChecker(final TaskProperties taskProperties,
+			final CrawlerProperties crawlerProperties)
 			throws FileNotFoundException, IOException {
 		super();
 
 		ResultTypeEnum.LANGUAGE.setMimumSentenceLength(Integer
 				.valueOf(taskProperties.getProperty(
 						"minimum_length_of_sentence_in_words", "2")));
-		DictionaryHolder.getInstance().loadDictionaries(taskProperties);
+		DictionaryHolder.getInstance().loadDictionaries(taskProperties,
+				crawlerProperties);
 		excludedWords = taskProperties.getExcludedWordsFromChecking();
 		maxCommonLanguageWords = taskProperties.getMaxCommonLanguageWords();
 		shouldSkipReferences = taskProperties.shouldSkipReferences();
@@ -122,8 +125,8 @@ public class TextChecker {
 		if (!isWordInIt)
 			return EMPTY_STRING;
 		final String word = innermatcher.group();
-		if (!WordCheckersHolder.getWordiscanonicalchecker().isWordCorrect(
-				word, DictionaryHolder.getInstance())) {
+		if (!WordCheckersHolder.getWordiscanonicalchecker().isWordCorrect(word,
+				DictionaryHolder.getInstance())) {
 			_log.info(word + " is not a correct word");
 			return EMPTY_STRING;
 		}

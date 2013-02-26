@@ -3,7 +3,7 @@ package com.ba.languagechecker.wordchecker.typedcheck;
 import java.util.regex.Pattern;
 
 import com.ba.languagechecker.entities.types.ResultTypeEnum;
-import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
+import com.ba.languagechecker.wordchecker.dictionary.holder.IDictionaryHolder;
 
 public class WordIsCanonicalChecker implements ICheckWord {
 
@@ -12,7 +12,7 @@ public class WordIsCanonicalChecker implements ICheckWord {
 
 	@Override
 	public boolean isWordCorrect(final String word,
-			final DictionaryHolder checker) {
+			final IDictionaryHolder checker) {
 		if (word == null)
 			return false;
 		if (word.isEmpty())

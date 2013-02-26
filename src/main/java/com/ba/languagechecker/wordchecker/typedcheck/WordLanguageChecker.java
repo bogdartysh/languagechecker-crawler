@@ -3,7 +3,7 @@ package com.ba.languagechecker.wordchecker.typedcheck;
 import org.apache.log4j.Logger;
 
 import com.ba.languagechecker.entities.types.ResultTypeEnum;
-import com.ba.languagechecker.wordchecker.dictionary.DictionaryHolder;
+import com.ba.languagechecker.wordchecker.dictionary.holder.IDictionaryHolder;
 
 public class WordLanguageChecker implements ICheckWord {
 	private Logger _log = Logger.getLogger(WordLanguageChecker.class
@@ -11,7 +11,7 @@ public class WordLanguageChecker implements ICheckWord {
 
 	@Override
 	public boolean isWordCorrect(final String word,
-			final DictionaryHolder dictionary) {
+			final IDictionaryHolder dictionary) {
 		final boolean isOriginal = dictionary.getOriginalLanguageDictionary()
 				.isWordInTheDictionary(word);
 		if (!isOriginal) {

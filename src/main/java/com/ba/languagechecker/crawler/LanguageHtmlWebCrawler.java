@@ -76,7 +76,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 		crawlerHtmlPageChecker.uploadTaskProperties(taskProperties);
 
 		htmlPageChecker = HtmlPageChecker.getInstance();
-		htmlPageChecker.uploadTaskProperties(taskProperties);
+		htmlPageChecker.uploadTaskProperties(taskProperties, crawlerProperties);
 		_log.debug("Properties uploaded for task="
 				+ taskProperties.getTaskExternalId());
 
