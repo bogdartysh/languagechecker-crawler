@@ -12,10 +12,8 @@
   </properties>
   <licenses>
     <license>
-        <name>Sleepecat-like</name>
-        <url>https://github.com/bogdartysh/languagechecker-crawler/blob/master/license.txt</url>
-        <distribution>repo</distribution>
-        <comments>Sleepycat-like License for languagechecker-crawler. The license is a strong form of copyleft because it mandates that redistributions in any form not only include the source code of languagechecker-crawler, but also any accompanying software that uses the languagechecker-crawler software. It is possible to circumvent this strict licensing policy through the purchase of a commercial software license from developer's community of languagechecker-crawler consisting of terms and conditions which are negotiated at the time of sale. This is an example of dual licensing.</comments>
+        <name>Dual license, GNU Affero General Public License or commercial</name>
+        <url>http://www.gnu.org/licenses/agpl-3.0.html</url>
       </license>
   </licenses>
    <issueManagement>
