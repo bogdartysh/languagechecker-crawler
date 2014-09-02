@@ -7,7 +7,7 @@
  *   the state wich is governed by the government:
  *   1. is defined as a terrorism supporter by either UN, OSCE or NATO,
  *   2. annexiated any territory of any other state(s) without UN, or OSCE or NATO approval.
- * . For the terms of this 
+ *   For the terms of this 
  *   license, see http://www.gnu.org/licenses/agpl-3.0.html.
  *
  *   You are free to use this library under the terms of the GNU Affero
