@@ -94,7 +94,7 @@ public class TextChecker {
 				if (currentSentense != null) {
 					if (currentSentense.getSentenceType() == ResultTypeEnum.LANGUAGE
 							&& numberOfSkippedWords < maxCommonLanguageWords) {
-						_log.info(word + " is correct, but will continue");
+						_log.debug(word + " is correct, but will continue");
 						numberOfSkippedWords++;
 						continue;
 
@@ -121,16 +121,16 @@ public class TextChecker {
 	private String getWordValue(final String foundWord) {
 		final Matcher innermatcher = WORD_PART_PATTERN.matcher(foundWord);
 		final boolean isWordInIt = innermatcher.find();
-		_log.info("found " + foundWord + " " + isWordInIt);
+		_log.debug("found " + foundWord + " " + isWordInIt);
 		if (!isWordInIt)
 			return EMPTY_STRING;
 		final String word = innermatcher.group();
 		if (!WordCheckersHolder.getWordiscanonicalchecker().isWordCorrect(word,
 				DictionaryHolder.getInstance())) {
-			_log.info(word + " is not a correct word");
+			_log.debug(word + " is not a correct word");
 			return EMPTY_STRING;
 		}
-		_log.info("trying word " + word);
+		_log.debug("trying word " + word);
 		if (excludedWords.contains(word)) {
 			_log.debug(word + " is excluded");
 			return EMPTY_STRING;
