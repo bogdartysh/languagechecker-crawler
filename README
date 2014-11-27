@@ -2,7 +2,7 @@ This crawler is designed for single purpouse:  to check that available web site 
 
 As a user you could open distro folder, find the last shipped distro, edit task.properties file (set task_external_id, start_urls, url_pattern, origin_language_code, shouldbe_language_code, pages_to_fill_all_forms) and run from terminal start.sh (or start.bat). Results will be in the results folder
 
-To use it one needs (for development):
+Developer will need to:
 1. install java jdk (at least 1.7 version)
 2. install maven (maven.apache.org)
 3. open terminal and execute
