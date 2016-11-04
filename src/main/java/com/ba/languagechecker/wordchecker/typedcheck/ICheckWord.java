@@ -9,5 +9,4 @@ public interface ICheckWord {
 
 	public ResultTypeEnum getWrongSentenceType();
 
-
 }

@@ -1,0 +1,26 @@
+task_external_id = artyushenko._ua_uk
+#crawler will start from this page
+start_urls=http://www.artyushenko.com.ua
+#java reg expression of all URL to be checked
+url_pattern=.*artyushenko\.com\.ua.*
+#original language
+origin_language_code=ru
+#this is your site language
+shouldbe_language_code=uk
+#additional propeties
+check_page_title=true
+check_page_text=true
+check_page_lexic=false
+check_page_language=true
+check_only_page_body=true
+max_pages_to_check=200
+max_depth=5
+excluded_words_from_checking=ltd,Copyright,Co.,Артюшенко
+minimum_length_of_sentence_in_words=3
+pages_to_fil_number_of_retries=-1
+skip_div_ids=
+
+
+
+
+

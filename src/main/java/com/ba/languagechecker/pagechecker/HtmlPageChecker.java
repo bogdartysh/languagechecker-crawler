@@ -1,6 +1,5 @@
 package com.ba.languagechecker.pagechecker;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -20,10 +19,10 @@ public class HtmlPageChecker implements ICheckPage {
 
 	private static final HtmlPageChecker INSTANCE = new HtmlPageChecker();
 
-	private boolean IsPageTitleCheckable;
-	private boolean IsPageTextCheckable;
-	private boolean IsOnlyBodyCheckable;
-	private Collection<String> divElementsToClear;
+	public boolean IsPageTitleCheckable;
+	public boolean IsPageTextCheckable;
+	public boolean IsOnlyBodyCheckable;
+	public Collection<String> divElementsToClear;
 
 	public static HtmlPageChecker getInstance() {
 		return INSTANCE;
@@ -33,7 +32,7 @@ public class HtmlPageChecker implements ICheckPage {
 		super();
 	}
 
-	private TextChecker textChecker;
+	public TextChecker textChecker;
 
 	@Override
 	public void checkHtmlParsedData(final List<SentenceResult> results,
@@ -52,9 +51,9 @@ public class HtmlPageChecker implements ICheckPage {
 	}
 
 	@Override
-	public void uploadTaskProperties(final TaskProperties taskProperties, 
+	public void uploadTaskProperties(final TaskProperties taskProperties,
 			final CrawlerProperties crawlerProperties)
-			throws FileNotFoundException, IOException {
+			throws IOException {
 		IsPageTitleCheckable = taskProperties.IsPageTitleCheckable();
 		IsPageTextCheckable = taskProperties.IsPageTextCheckable();
 		IsOnlyBodyCheckable = taskProperties.IsOnlyBodyCheckable();

@@ -1,7 +1,6 @@
 package com.ba.languagechecker;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,14 +13,13 @@ import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 
 public class App {
-	private static final String RESULT_FOLDER = "results/";
-	private final static String TASK_PROPERTIES_FILE_NAME = "task.properties";
-	private final static String CRAWLER_PROPERTIES_FILE_NAME = "crawler.properties";
+	public static final String RESULT_FOLDER = "results/";
+	public final static String TASK_PROPERTIES_FILE_NAME = "task.properties";
+	public final static String CRAWLER_PROPERTIES_FILE_NAME = "crawler.properties";
 
 	private static Logger _log = Logger.getLogger(App.class.getCanonicalName());
 
-	public static void main(String[] args) throws FileNotFoundException,
-			IOException {
+	public static void main(String[] args) throws IOException {
 		try (final FileInputStream crawlerPropertiesFileStream = new FileInputStream(
 				CRAWLER_PROPERTIES_FILE_NAME)) {
 			final CrawlerProperties crawlerProperties = new CrawlerProperties();
@@ -43,10 +41,12 @@ public class App {
 					}
 				}
 
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				_log.error(e, e);
 			}
-		} catch (Exception e1) {
+		}
+		catch (Exception e1) {
 			_log.error(e1, e1);
 		}
 	}

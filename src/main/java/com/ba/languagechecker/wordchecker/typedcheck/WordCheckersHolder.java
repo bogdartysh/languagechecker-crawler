@@ -12,13 +12,13 @@ import com.ba.languagechecker.wordchecker.dictionary.holder.DictionaryHolder;
 
 public class WordCheckersHolder {
 
-	private final static ICheckWord wordIsCanonicalChecker = new WordIsCanonicalChecker();
-	private final static ICheckWord wordLanguageChecker = new WordLanguageChecker();
-	private final static ICheckWord wordLexicChecker = new WordLexicChecker();
-	private static Logger _log = Logger.getLogger(WordCheckersHolder.class
+	public final static ICheckWord wordIsCanonicalChecker = new WordIsCanonicalChecker();
+	public final static ICheckWord wordLanguageChecker = new WordLanguageChecker();
+	public final static ICheckWord wordLexicChecker = new WordLexicChecker();
+	public static Logger _log = Logger.getLogger(WordCheckersHolder.class
 			.getCanonicalName());
 
-	private List<ICheckWord> checkers;
+	public List<ICheckWord> checkers;
 
 	public static final WordCheckersHolder HOLDER_INSTANCE = new WordCheckersHolder();
 
@@ -38,18 +38,6 @@ public class WordCheckersHolder {
 			checkers.add(wordLexicChecker);
 		}
 
-	}
-
-	public static ICheckWord getWordiscanonicalchecker() {
-		return wordIsCanonicalChecker;
-	}
-
-	public static ICheckWord getWordlanguagechecker() {
-		return wordLanguageChecker;
-	}
-
-	public static ICheckWord getWordlexicchecker() {
-		return wordLexicChecker;
 	}
 
 	public ResultTypeEnum checkWord(final String word) {

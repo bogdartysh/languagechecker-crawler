@@ -60,7 +60,7 @@ public class TaskProperties extends Properties {
 		final String values = this.getProperty(propertyName);
 		if (values == null || values.isEmpty()) {
 			_log.debug(propertyName + " is empty");
-			return new LinkedList<String>();
+			return new LinkedList<>();
 		}
 
 		final List<String> valueList = Arrays.asList(values.split(","));
@@ -74,27 +74,8 @@ public class TaskProperties extends Properties {
 				+ (new Date().getTime() / 1000L) + "_out.csv");
 	}
 
-	public List<String> getSeleniumFiles() {
-		return getListedValues("selenium_test_files");
-	}
-
-	public List<String> getPagesToFillAllForms() {
-		return getListedValues("pages_to_fill_all_forms");
-	}
-	
 	public int getMaxCommonLanguageWords() {
-		return Integer.valueOf(getProperty("max_common_language_words",
-				"2"));
-	}
-
-	public int getPagesToFillNumberOfRetries() {
-		return Integer.valueOf(getProperty("pages_to_fil_number_of_retries",
-				"1"));
-	}
-
-	public boolean getPagesToFillCheckDirectedToNewUrls() {
-		return Boolean.valueOf(getProperty(
-				"pages_to_fill_check_directed_to_new_urls", "true"));
+		return Integer.valueOf(getProperty("max_common_language_words", "2"));
 	}
 
 	public String getTaskExternalId() {
@@ -105,23 +86,14 @@ public class TaskProperties extends Properties {
 		return getListedValues("skip_div_ids");
 	}
 	public boolean shouldSkipReferences() {
-		return Boolean.valueOf(getProperty(
-				"skip_references", "false"));
+		return Boolean.valueOf(getProperty("skip_references", "false"));
 	}
 
-	public boolean couldWordsBeLongerThen31Letters() {
-		return Boolean.valueOf(getProperty(
-				"could_words_be_longer_then_31_letters", "false"));
-	}
-	
 	public String getOriginalLanguageCode() {
 		return getProperty("origin_language_code");
 	}
-	
-	public String getShouldBeLanguageCode() {
-		return getProperty("shouldbe_language_code");
-	}
-	
+
+
 	public String getUrlPattern() {
 		return getProperty("url_pattern", ".*");
 	}

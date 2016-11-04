@@ -9,17 +9,17 @@ import java.io.Reader;
 import org.apache.log4j.Logger;
 
 public abstract class AbstractLanguageDictionary implements ILanguageDictionary {
-	private Logger _log = Logger
-			.getLogger(AbstractLanguageDictionary.class.getCanonicalName());
-	
-	protected static final String PATH_TO_DICTIONARY = "dict/";
-	protected static final String DICTIONARY_FILE_EXTENSION = ".dict";
-	protected static final int MAX_AMOUNT_OF_WORDS = 300000;
+	private Logger _log = Logger.getLogger(AbstractLanguageDictionary.class
+			.getCanonicalName());
 
-	protected abstract void clearDictionaries();
-	
-	protected abstract void addWord(final String word);
-	
+	public static final String PATH_TO_DICTIONARY = "dict/";
+	public static final String DICTIONARY_FILE_EXTENSION = ".dict";
+	public static final int MAX_AMOUNT_OF_WORDS = 300000;
+
+	public abstract void clearDictionaries();
+
+	public abstract void addWord(final String word);
+
 	@Override
 	public void loadDictionaryFile(final String dictionaryFileName)
 			throws FileNotFoundException, IOException {

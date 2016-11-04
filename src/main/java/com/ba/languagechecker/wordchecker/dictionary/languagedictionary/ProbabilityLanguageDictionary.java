@@ -1,15 +1,16 @@
 package com.ba.languagechecker.wordchecker.dictionary.languagedictionary;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.skjegstad.utils.BloomFilter;
 
-public class ProbabilityLanguageDictionary extends AbstractLanguageDictionary implements ILanguageDictionary {
+public class ProbabilityLanguageDictionary extends AbstractLanguageDictionary
+		implements
+		ILanguageDictionary {
 
-	private final BloomFilter<String> bloomFilter;
+	public final BloomFilter<String> bloomFilter;
 
-	public ProbabilityLanguageDictionary(final String language, final double falsePositiveProbability) throws FileNotFoundException, IOException {
+	public ProbabilityLanguageDictionary(final String language, final double falsePositiveProbability) throws IOException {
 		super();
 
 		bloomFilter = new BloomFilter<>(falsePositiveProbability, MAX_AMOUNT_OF_WORDS);
@@ -27,12 +28,12 @@ public class ProbabilityLanguageDictionary extends AbstractLanguageDictionary im
 	}
 
 	@Override
-	protected void clearDictionaries() {
+	public void clearDictionaries() {
 		bloomFilter.clear();
 	}
 
 	@Override
-	protected void addWord(final String word) {
+	public void addWord(final String word) {
 		bloomFilter.add(word);
 	}
 

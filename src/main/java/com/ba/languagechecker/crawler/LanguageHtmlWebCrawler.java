@@ -1,10 +1,9 @@
 package com.ba.languagechecker.crawler;
 
-import edu.uci.ics.crawler4j.crawler.Page;
-import edu.uci.ics.crawler4j.crawler.WebCrawler;
-
-import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.url.WebURL;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -17,10 +16,10 @@ import com.ba.languagechecker.pagechecker.output.ICrawlerOutputStream;
 import com.ba.languagechecker.properties.CrawlerProperties;
 import com.ba.languagechecker.properties.TaskProperties;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import edu.uci.ics.crawler4j.crawler.Page;
+import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import edu.uci.ics.crawler4j.url.WebURL;
 
 public class LanguageHtmlWebCrawler extends WebCrawler {
 	private final static Logger _log = Logger
@@ -39,7 +38,7 @@ public class LanguageHtmlWebCrawler extends WebCrawler {
 	 * should be crawled or not (based on your crawling logic).
 	 */
 	@Override
-	public boolean shouldVisit(final WebURL url) {
+	public boolean shouldVisit(final Page referringPage,  final WebURL url) {
 		return crawlerHtmlPageChecker.shouldVisitPage(url.getURL());
 	}
 

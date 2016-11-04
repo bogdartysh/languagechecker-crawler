@@ -14,13 +14,13 @@ import com.ba.languagechecker.wordchecker.dictionary.languagedictionary.HashSetL
 import com.ba.languagechecker.wordchecker.dictionary.languagedictionary.ProbabilityLanguageDictionary;
 
 public class DictionaryHolder extends AbstractDictionaryHolder {
-	
+
 	private Logger _log = Logger.getLogger(DictionaryHolder.class
 			.getCanonicalName());
-	private Map<String, ILanguageDictionary> availableDictionaries = new HashMap<String, ILanguageDictionary>(
+	public Map<String, ILanguageDictionary> availableDictionaries = new HashMap<String, ILanguageDictionary>(
 			2);
 
-	private static final DictionaryHolder DICTIONARY_HOLDER_INSTANCE = new DictionaryHolder();
+	public static final DictionaryHolder DICTIONARY_HOLDER_INSTANCE = new DictionaryHolder();
 
 	public static IDictionaryHolder getInstance() {
 		return DICTIONARY_HOLDER_INSTANCE;
@@ -32,7 +32,7 @@ public class DictionaryHolder extends AbstractDictionaryHolder {
 
 	public void loadDictionaries(final TaskProperties taskProperties,
 			final CrawlerProperties crawlerProperties)
-			throws FileNotFoundException, IOException {
+			throws IOException {
 		originalLanguageDictionary = getDictionary(
 				taskProperties.getOriginalLanguageCode(),
 				crawlerProperties.getFalsePositiveProbability());
@@ -51,13 +51,13 @@ public class DictionaryHolder extends AbstractDictionaryHolder {
 		} else {
 			_log.info("loading dictionary " + languageCode + " dictionary");
 
-			final ILanguageDictionary dict = (falsePositiveProbability<=0)?
-					new HashSetLanguageDictionary(languageCode):
-						new ProbabilityLanguageDictionary(languageCode, falsePositiveProbability);
+			final ILanguageDictionary dict = (falsePositiveProbability <= 0)
+					? new HashSetLanguageDictionary(languageCode)
+					: new ProbabilityLanguageDictionary(languageCode,
+							falsePositiveProbability);
 			availableDictionaries.put(languageCode, dict);
 			return dict;
 		}
 	}
-
 
 }

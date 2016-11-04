@@ -20,9 +20,9 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 public class LanguageCheckerCrawlerRunner implements Runnable {
 	private static Logger _log = Logger
 			.getLogger(LanguageCheckerCrawlerRunner.class.getCanonicalName());
-	private final TaskProperties taskProperties;
-	private final CrawlerProperties crawlerProperties;
-	final ICrawlerOutputStream crawlerOutputStream;
+	public final TaskProperties taskProperties;
+	public final CrawlerProperties crawlerProperties;
+	public final ICrawlerOutputStream crawlerOutputStream;
 
 	public LanguageCheckerCrawlerRunner(final TaskProperties taskProperties,
 			final CrawlerProperties crawlerProperties,
@@ -133,7 +133,8 @@ public class LanguageCheckerCrawlerRunner implements Runnable {
 			controller.start(LanguageHtmlWebCrawler.class, Integer
 					.valueOf(crawlerProperties
 							.getProperty("number_of_crawlers")));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			_log.error(e, e);
 		}
 	}

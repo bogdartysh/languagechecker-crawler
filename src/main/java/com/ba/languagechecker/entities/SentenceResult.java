@@ -64,7 +64,6 @@ public class SentenceResult {
 		setSentence(text.substring(beginningIndex, endingIndex));
 	}
 
-
 	public String toCSVString() {
 		return new StringBuilder().append("\"").append(parentPage.getUrl())
 				.append("\", \"").append(sentence).append("\", \"")
@@ -96,6 +95,5 @@ public class SentenceResult {
 	public void setSentenceType(ResultTypeEnum sentenceType) {
 		this.sentenceType = sentenceType;
 	}
-
 
 }

@@ -12,9 +12,9 @@ public class CheckerUrlVisitable {
 	private static Logger _log = Logger.getLogger(CheckerUrlVisitable.class
 			.getCanonicalName());
 
-	private static final CheckerUrlVisitable INSTANCE = new CheckerUrlVisitable();
+	public static final CheckerUrlVisitable INSTANCE = new CheckerUrlVisitable();
 
-	private final static Pattern FILTERS = Pattern
+	public final static Pattern FILTERS = Pattern
 			.compile(".*(\\.(css|js|bmp|gif|jpe?g"
 					+ "|png|tiff?|mid|mp2|mp3|mp4"
 					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
@@ -24,14 +24,14 @@ public class CheckerUrlVisitable {
 		return INSTANCE;
 	}
 
-	protected CheckerUrlVisitable() {
+	public CheckerUrlVisitable() {
 		super();
 	}
 
-	private List<String> excludedUrls;
+	public List<String> excludedUrls;
 
-	private Pattern parentUrlFilterRegex;
-	private static String urlPatternRegexExpression;
+	public Pattern parentUrlFilterRegex;
+	public static String urlPatternRegexExpression;
 
 	public boolean shouldVisitPage(final String url) {
 
@@ -48,8 +48,7 @@ public class CheckerUrlVisitable {
 
 	public void uploadTaskProperties(final TaskProperties taskProperties) {
 		excludedUrls = taskProperties.getExcludedUrls();
-		_log.info(" url_pattern = "
-				+ taskProperties.getUrlPattern());
+		_log.info(" url_pattern = " + taskProperties.getUrlPattern());
 		urlPatternRegexExpression = taskProperties.getUrlPattern();
 		parentUrlFilterRegex = Pattern.compile(urlPatternRegexExpression);
 	}

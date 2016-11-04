@@ -1,8 +1,6 @@
 package com.ba.languagechecker.wordchecker;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,26 +17,26 @@ import com.ba.languagechecker.wordchecker.dictionary.holder.DictionaryHolder;
 import com.ba.languagechecker.wordchecker.typedcheck.WordCheckersHolder;
 
 public class TextChecker {
-	private static Logger _log = Logger.getLogger(TextChecker.class
+	public static Logger _log = Logger.getLogger(TextChecker.class
 			.getCanonicalName());
-	private static final String EMPTY_STRING = "";
-	private static final String WORD_PART_PATTERN_EXPR = "[\\p{L}a-zA-Z]+";
-	private static final Pattern WORD_PART_PATTERN = Pattern
+	public static final String EMPTY_STRING = "";
+	public static final String WORD_PART_PATTERN_EXPR = "[\\p{L}a-zA-Z]+";
+	public static final Pattern WORD_PART_PATTERN = Pattern
 			.compile(WORD_PART_PATTERN_EXPR);
 
-	private static final String SPACE_BEFORE_WORD = "[\\p{Blank}\\s.,\"\']+";
-	private static final String WORD_PATTERN_EXPR = SPACE_BEFORE_WORD
+	public static final String SPACE_BEFORE_WORD = "[\\p{Blank}\\s.,\"\']+";
+	public static final String WORD_PATTERN_EXPR = SPACE_BEFORE_WORD
 			+ WORD_PART_PATTERN_EXPR + SPACE_BEFORE_WORD;
-	private static final Pattern WORD_PATTERN = Pattern
+	public static final Pattern WORD_PATTERN = Pattern
 			.compile(WORD_PATTERN_EXPR);
-	private boolean shouldSkipReferences = false;
+	public boolean shouldSkipReferences = false;
 
-	private List<String> excludedWords;
-	private int maxCommonLanguageWords = 0;
+	public List<String> excludedWords;
+	public int maxCommonLanguageWords = 0;
 
 	public TextChecker(final TaskProperties taskProperties,
 			final CrawlerProperties crawlerProperties)
-			throws FileNotFoundException, IOException {
+			throws IOException {
 		super();
 
 		ResultTypeEnum.LANGUAGE.setMimumSentenceLength(Integer
@@ -57,7 +55,7 @@ public class TextChecker {
 				+ taskProperties.getProperty("max_depth")
 				+ " distance_between_sentences_in_characters = "
 				+ taskProperties
-						.getProperty("distance_between_sentences_in_characters"));
+				.getProperty("distance_between_sentences_in_characters"));
 
 	}
 
@@ -111,21 +109,15 @@ public class TextChecker {
 		pageCheckResult.setHasErrors(!wrongSentences.isEmpty());
 	}
 
-	public List<SentenceResult> getWrongSentences(final String text,
-			final PageResult pageCheckResult) {
-		final List<SentenceResult> wrongSentences = new LinkedList<SentenceResult>();
-		addWrongSentences(wrongSentences, text, pageCheckResult);
-		return wrongSentences;
-	}
-
 	private String getWordValue(final String foundWord) {
 		final Matcher innermatcher = WORD_PART_PATTERN.matcher(foundWord);
 		final boolean isWordInIt = innermatcher.find();
 		_log.debug("found " + foundWord + " " + isWordInIt);
-		if (!isWordInIt)
+		if (!isWordInIt) {
 			return EMPTY_STRING;
+		}
 		final String word = innermatcher.group();
-		if (!WordCheckersHolder.getWordiscanonicalchecker().isWordCorrect(word,
+		if (!WordCheckersHolder.wordIsCanonicalChecker.isWordCorrect(word,
 				DictionaryHolder.getInstance())) {
 			_log.debug(word + " is not a correct word");
 			return EMPTY_STRING;

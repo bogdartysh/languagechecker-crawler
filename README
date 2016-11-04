@@ -3,13 +3,12 @@ This crawler is designed for single purpouse:  to check that available web site 
 As a user you could open distro folder, find the last shipped distro, edit task.properties file (set task_external_id, start_urls, url_pattern, origin_language_code, shouldbe_language_code, pages_to_fill_all_forms) and run from terminal start.sh (or start.bat). Results will be in the results folder
 
 Developer will need to:
-1. install java jdk (at least 1.7 version)
-2. install maven (maven.apache.org)
+1. install maven (maven.apache.org) and Java 8+
 3. open terminal and execute
 3.1 mvn clean install
 3.2 mvn assembly:single
 3.3 cd target
-3.4 adjust settings of the project (file task.properties)
+3.4 adjust settings of the project (file task.properties, examples in tasks folder)
 3.5 execute : java -jar -Xsx1024m -Xmx1024 languagechecker-crawler-1.0-SNAPSHOT-jar-with-dependencies.jar >results.csv
 results will be in results.csv (some times in cases of error that csv will be not readable in OpenOffice, so please check it with editor first).
 log files are in target/logs

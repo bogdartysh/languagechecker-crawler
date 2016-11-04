@@ -14,7 +14,7 @@ public class TextManipulator {
 	private static final String REFERENCES_PATTERN_EXPR_SIGN = "\".*\"";
 
 	private static final String REFERENCES_PATTERN_EXPR_GL = "<<.*>>";
-	
+
 	private static Logger _log = Logger.getLogger(TextManipulator.class
 			.getCanonicalName());
 

@@ -1,19 +1,18 @@
 package com.ba.languagechecker.wordchecker.dictionary.languagedictionary;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-
-public class HashSetLanguageDictionary extends AbstractLanguageDictionary implements
-		ILanguageDictionary {
+public class HashSetLanguageDictionary extends AbstractLanguageDictionary
+		implements
+			ILanguageDictionary {
 
 	public final Set<String> wordDictionary = new HashSet<String>(
 			MAX_AMOUNT_OF_WORDS);
 
 	public HashSetLanguageDictionary(final String language)
-			throws FileNotFoundException, IOException {
+			throws  IOException {
 		super();
 
 		loadDictionaryFile(PATH_TO_DICTIONARY + language
@@ -21,7 +20,7 @@ public class HashSetLanguageDictionary extends AbstractLanguageDictionary implem
 	}
 
 	@Override
-	protected void clearDictionaries() {
+	public void clearDictionaries() {
 		wordDictionary.clear();
 	}
 
@@ -36,7 +35,7 @@ public class HashSetLanguageDictionary extends AbstractLanguageDictionary implem
 	}
 
 	@Override
-	protected void addWord(final String word) {
+	public void addWord(final String word) {
 		wordDictionary.add(word);
 	}
 
