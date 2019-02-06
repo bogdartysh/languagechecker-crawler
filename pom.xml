@@ -4,7 +4,7 @@
 	<groupId>com.ba.languagechecker</groupId>
 	<artifactId>languagechecker-crawler</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>languagechecker-crawler</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>edu.uci.ics</groupId>
 			<artifactId>crawler4j</artifactId>
-			<version>4.2</version>
+			<version>4.4.0</version>
 		</dependency>
 
 		<dependency>
@@ -37,20 +37,20 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.7.1</version>
+			<version>1.11.3</version>
 		</dependency>
 
 
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
+			<version>1.2.17</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
-			<version>2.11</version>
+			<version>2.32</version>
 		</dependency>
 	</dependencies>
 	<build>
